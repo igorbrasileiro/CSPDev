@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.ui.editors">
+      <editor
+            class="br.ufcg.edu.csp.CSPEditor"
+            contributorClass="org.eclipse.ui.texteditor.BasicTextEditorActionContributor"
+            extensions="csp"
+            icon="icons/sample.gif"
+            id="br.ufcg.edu.csp.editor"
+            name="Editor CSP">
+      </editor>
+   </extension>
+
+</plugin>
