@@ -1,9 +1,5 @@
 // Generated from Csp.g4 by ANTLR 4.4
 package br.ufcg.edu.csp.parser;
-import org.antlr.v4.runtime.Lexer;
-import org.antlr.v4.runtime.CharStream;
-import org.antlr.v4.runtime.Token;
-import org.antlr.v4.runtime.TokenStream;
 import org.antlr.v4.runtime.*;
 import org.antlr.v4.runtime.atn.*;
 import org.antlr.v4.runtime.dfa.DFA;
@@ -46,7 +42,11 @@ public class CspLexer extends Lexer {
 		"INTR", "DIGIT", "ID", "LINECOMMENT", "WS"
 	};
 
-
+	// CRIADO POR IGOR BRASILEIRO
+	public static final Vocabulary VOCABULARY = new VocabularyImpl(tokenNames, ruleNames);
+	//----
+	
+	
 	public CspLexer(CharStream input) {
 		super(input);
 		_interp = new LexerATNSimulator(this,_ATN,_decisionToDFA,_sharedContextCache);

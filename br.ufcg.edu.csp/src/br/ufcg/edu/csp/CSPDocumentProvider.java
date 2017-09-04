@@ -2,7 +2,6 @@ package br.ufcg.edu.csp;
 
 import java.io.File;
 import java.io.FilenameFilter;
-import java.net.MalformedURLException;
 import java.util.ArrayList;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
@@ -12,12 +11,15 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.text.DocumentEvent;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.IDocumentListener;
+import org.eclipse.jface.text.IDocumentPartitioner;
+import org.eclipse.jface.text.rules.FastPartitioner;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.editors.text.FileDocumentProvider;
+
 
 public class CSPDocumentProvider extends FileDocumentProvider implements IDocumentListener {
 
@@ -26,6 +28,10 @@ public class CSPDocumentProvider extends FileDocumentProvider implements IDocume
 		IDocument document = super.createDocument(element);
 		if(document != null) {
 			// TODO document partitioner fastpartitioner
+			IDocumentPartitioner partitioner = new FastPartitioner(new CSPPartitionScanner(), 
+					new String[] {CSPPartitionScanner.CSP_COMMENT});
+			partitioner.connect(document);
+			document.setDocumentPartitioner(partitioner);
 			document.addDocumentListener(this);
 		}
 		
