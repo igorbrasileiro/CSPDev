@@ -12,12 +12,17 @@ import org.eclipse.swt.SWT;
 public class CSPWordRules extends RuleBasedScanner {
 
 	public CSPWordRules(ColorManager colorManager) {
-		IToken wordToken = new Token(new TextAttribute(colorManager.getColor(ICSPColorConstants.CSP_RESERVED_WORDS),null, SWT.BOLD));
+		IToken wordTokenBold = new Token(new TextAttribute(colorManager.getColor(ICSPColorConstants.CSP_RESERVED_WORDS_GREEN),null, SWT.BOLD));
+		IToken wordTokenUnbold = new Token(new TextAttribute(colorManager.getColor(ICSPColorConstants.CSP_RESERVED_WORDS_GREEN)));
 		
 		WordRule wr = new WordRule(new CSPWordRuleDetector());
 
-		for(String word : getReservedWords()) {
-			wr.addWord(word, wordToken);
+		for(String word : getBoldReservedWords()) {
+			wr.addWord(word, wordTokenBold);
+		}
+		
+		for(String word : getUnboldReservedWords()) {
+			wr.addWord(word, wordTokenUnbold);
 		}
 		
 		IRule[] rules = new IRule[1];
@@ -26,8 +31,13 @@ public class CSPWordRules extends RuleBasedScanner {
 		setRules(rules);
 	}
 	
-	private String[] getReservedWords() {
+	private String[] getBoldReservedWords() {
 		// falta [T=, FD, "div" 
 		return new String[] { "channel", "assert", "if", "then", "else", "datatype", "let", "external", "within", "&"};
+	}
+	
+	private String[] getUnboldReservedWords() {
+		// numeros , numeros,
+		return new String[] { "STOP", "SKIP", "and", "or", "not", "[|", "|]", "|||", "[]", "|~|"};
 	}
 }
