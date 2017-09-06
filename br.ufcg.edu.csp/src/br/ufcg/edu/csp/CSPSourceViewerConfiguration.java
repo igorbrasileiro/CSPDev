@@ -29,22 +29,20 @@ public class CSPSourceViewerConfiguration extends SourceViewerConfiguration {
 	
 	public CSPSourceViewerConfiguration() {
 		colorManager = new ColorManager();
-		wordRules = new CSPWordRules(colorManager);
-		
 	}
 	
 	// se precisar
 	//COLOCAR AQUI TODAS AS STRINGS REFERENTES A TODOS DAMAGER E REPAIRER 
 	@Override
 	public String[] getConfiguredContentTypes(ISourceViewer sourceViewer) {
-		return new String[] {CSPPartitionScanner.CSP_COMMENT };
+		return new String[] {CSPPartitionScanner.CSP_COMMENT};
 	}
 	
 	@Override
 	public IPresentationReconciler getPresentationReconciler(ISourceViewer sourceViewer) {
 		PresentationReconciler reconciler = new PresentationReconciler();
 		
-		DefaultDamagerRepairer dr = new DefaultDamagerRepairer(wordRules);
+		DefaultDamagerRepairer dr = new DefaultDamagerRepairer(getCSPWordRules());
 		reconciler.setDamager(dr, IDocument.DEFAULT_CONTENT_TYPE);
 		reconciler.setRepairer(dr, IDocument.DEFAULT_CONTENT_TYPE);
 		
@@ -68,7 +66,13 @@ public class CSPSourceViewerConfiguration extends SourceViewerConfiguration {
 	}
 	
 	
-	
+	private ITokenScanner getCSPWordRules() {
+		if(wordRules == null) {
+			wordRules = new CSPWordRules(colorManager);
+		}
+		
+		return wordRules;
+	}
 	
 	private ITokenScanner getCSPComment() {
 		// CRIAR UMA CLASSE DEIXE DE PREGUICA

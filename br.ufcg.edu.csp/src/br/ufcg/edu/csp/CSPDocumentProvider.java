@@ -21,6 +21,7 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.editors.text.FileDocumentProvider;
 
 
+
 public class CSPDocumentProvider extends FileDocumentProvider implements IDocumentListener {
 
 	@Override
