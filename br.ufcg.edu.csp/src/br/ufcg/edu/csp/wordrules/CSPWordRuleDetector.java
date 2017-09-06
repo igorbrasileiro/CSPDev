@@ -16,7 +16,9 @@ public class CSPWordRuleDetector implements IWordDetector {
 	
 	// TODO completar char das palavras reservadas
 	private boolean identifyCharacter(char c) {
-		return  c == '-' || c == '+'
+		return  
+				Character.isJavaIdentifierPart(c)
+				|| c == '-' || c == '+'
 				|| c == '$' || c == '*'
 				|| c == '%' || c == '&'
 				|| c == "'".toCharArray()[0] // nao sei outra forma
@@ -27,8 +29,6 @@ public class CSPWordRuleDetector implements IWordDetector {
 				|| c == '(' || c == ')' 
 				|| c == '[' || c == ']'
 				|| c == '{' || c == '}'
-				|| (c >= 'a' && c <= 'z')
-				|| (c >= 'A' && c <= 'Z')
 				|| c == '|' || c == '~';
 		
 		// "'\"'", "'#'", "'$'", "'%'", "'&'", "'''", "'('", "')'", "'*'", "'+'", "','", "'-'", "'.'", "'/'"
