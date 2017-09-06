@@ -27,7 +27,6 @@ public class CSPDocumentProvider extends FileDocumentProvider implements IDocume
 	protected IDocument createDocument(Object element) throws CoreException {
 		IDocument document = super.createDocument(element);
 		if(document != null) {
-			// TODO document partitioner fastpartitioner
 			IDocumentPartitioner partitioner = new FastPartitioner(new CSPPartitionScanner(), 
 					new String[] {CSPPartitionScanner.CSP_COMMENT});
 			partitioner.connect(document);
@@ -40,7 +39,6 @@ public class CSPDocumentProvider extends FileDocumentProvider implements IDocume
 	
 	@Override
 	public void documentAboutToBeChanged(DocumentEvent event) {
-		// TODO Auto-generated method stub
 		
 	}
 

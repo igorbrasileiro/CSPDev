@@ -14,7 +14,7 @@ public class CSPWordRuleDetector implements IWordDetector {
 		return identifyCharacter(c);
 	}
 	
-	// TODO completar
+	// TODO completar char das palavras reservadas
 	private boolean identifyCharacter(char c) {
 		return  c == '-' || c == '+'
 				|| c == '$' || c == '*'
@@ -26,7 +26,8 @@ public class CSPWordRuleDetector implements IWordDetector {
 				|| c == '>' || c == '<'
 				|| c == '(' || c == ')' 
 				|| c == '[' || c == ']'
-				|| c == '{' || c == '}';
+				|| c == '{' || c == '}'
+				|| (c >= 'a' && c <= 'z');
 		
 		// "'\"'", "'#'", "'$'", "'%'", "'&'", "'''", "'('", "')'", "'*'", "'+'", "','", "'-'", "'.'", "'/'"
 	}

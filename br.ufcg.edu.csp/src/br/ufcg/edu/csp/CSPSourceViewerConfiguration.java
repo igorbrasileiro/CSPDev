@@ -28,7 +28,6 @@ public class CSPSourceViewerConfiguration extends SourceViewerConfiguration {
 	private CSPWordRules wordRules;
 	
 	public CSPSourceViewerConfiguration() {
-		// TODO Iniciar wordrule
 		colorManager = new ColorManager();
 		wordRules = new CSPWordRules(colorManager);
 		
@@ -68,7 +67,9 @@ public class CSPSourceViewerConfiguration extends SourceViewerConfiguration {
 	    return new DefaultAnnotationHover(true);
 	}
 	
-	//
+	
+	
+	
 	private ITokenScanner getCSPComment() {
 		// CRIAR UMA CLASSE DEIXE DE PREGUICA
 		ITokenScanner scanner = new RuleBasedScanner();

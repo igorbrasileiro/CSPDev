@@ -9,7 +9,6 @@ public class CSPEditor extends TextEditor {
 	private ColorManager colorManager;
 	
 	public CSPEditor() {
-		// TODO color manager
 		super();
 		colorManager = new ColorManager();
 		setSourceViewerConfiguration(new CSPSourceViewerConfiguration());
