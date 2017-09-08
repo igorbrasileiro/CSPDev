@@ -44,12 +44,11 @@ public class CSPDocumentProvider extends FileDocumentProvider implements IDocume
 	
 	@Override
 	public void documentAboutToBeChanged(DocumentEvent event) {
-		
+		// nothing
 	}
 
 	@Override
 	public void documentChanged(DocumentEvent event) {
-		// TODO OutlineView update
 		IWorkbenchPart part = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActivePart();
 		CSPOutlinePage outlinePage = (CSPOutlinePage) Adapters.adapt(part, IContentOutlinePage.class);
 		outlinePage.updateContent();

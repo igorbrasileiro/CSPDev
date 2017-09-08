@@ -36,7 +36,7 @@ public class CSPOutlineContentProvider implements ITreeContentProvider {
 	}
 
 
-	public String getTextFromEditor() {
+	private String getTextFromEditor() {
 		try{
 			IEditorPart part = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
 
@@ -60,8 +60,6 @@ public class CSPOutlineContentProvider implements ITreeContentProvider {
 		CspParser parser = (CspParser) ParserUtil.getParserFromText(getTextFromEditor());
 		CspParser.SpecContext tree = parser.spec();
 		
-		//System.out.println("em getTree. Numero de erros sintaticos" + parser.getNumberOfSyntaxErrors());
-
 		return tree; // nao pode retornar null, impede de criar a tree;
 	}
 
@@ -82,33 +80,41 @@ public class CSPOutlineContentProvider implements ITreeContentProvider {
 
 	@Override
 	public Object[] getElements(Object obj) {
-		ArrayList elementos = new ArrayList();
+		// TODO: regra do parser simpleDefinition
+		ArrayList<ExpressionNodeDecorator> elementos = new ArrayList<>();
+		if(obj instanceof CspParser.SpecContext){
+			getElements(obj, elementos);
+		} else if (obj instanceof ExpressionNodeDecorator){
+			return getElements(((ExpressionNodeDecorator) obj).getNode());
+		}
+		
+		return elementos.toArray();
+	}
+
+	/**
+	 * Metodo recursivo para descer da regra Spec até SimpleDefinition
+	 * @param obj
+	 * @param list
+	 */
+	private void getElements(Object obj, ArrayList<ExpressionNodeDecorator> list) {
 		if(obj instanceof CspParser.SpecContext){
 			int children = ((ParseTree) obj).getChildCount();
 			for (int i = 0; i < children; i++) {
 				ParseTree node = ((ParseTree) obj).getChild(i);
-				if(!(node instanceof TerminalNode)){
-					elementos.add( new ExpressionNodeDecorator(node));
-				}
+				getElements(node, list);
 			}
-		} else if (obj instanceof ExpressionNodeDecorator){
-			return getElements(((ExpressionNodeDecorator) obj).getNode());
+		} else if(obj instanceof CspParser.DefinitionContext) {
+			ParseTree node = ((ParseTree) obj).getChild(0);
+			getElements(node, list);
+		} else if(obj instanceof CspParser.SimpleDefinitionContext) {
+			String text = ((ParseTree) obj).getText();
+			list.add(new ExpressionNodeDecorator((ParseTree) obj));
 		}
-		//System.out.println("%%%%%%%%%%%%%%%%%" + obj.getClass() + "%%%%%%%%%%%" + obj);
-		//Date nova = new Date();
-		//Object[] retorno = {1,"Dois",nova};
-		//System.out.println("%%%%%%%%%%%% RETORNO: " + elementos.toArray());
-
-		//se colcoar esse return abaixo ele nao pinta. Isso deve ser porque precisamos adaptar 
-		//os objetos do array que tem um tipo especifico ParseTree para que eles mostrem algum texto deles
-		//baseado no tipo do paragrafo. Por exemplo, quando for um ModContext ele pinta a expressao com o modulo.
-
-		return elementos.toArray();
 	}
-
+	
 	@Override
 	public Object[] getChildren(Object obj) {
-		ArrayList elementos = new ArrayList();
+		ArrayList<ExpressionNodeDecorator> elementos = new ArrayList<>();
 		if(obj instanceof CspParser.SpecContext){
 			int children = ((ParseTree) obj).getChildCount();
 			for (int i = 0; i < children; i++) {

@@ -9,13 +9,11 @@ import org.eclipse.jface.text.rules.MultiLineRule;
 import org.eclipse.jface.text.rules.NumberRule;
 import org.eclipse.jface.text.rules.RuleBasedScanner;
 import org.eclipse.jface.text.rules.Token;
-import org.eclipse.jface.text.rules.WhitespaceRule;
 import org.eclipse.jface.text.rules.WordRule;
 import org.eclipse.swt.SWT;
 
 
 public class CSPWordRules extends RuleBasedScanner {
-	private ColorManager colorManager;
 	private IToken wordTokenBold;
 	private IToken wordTokenUnbold;
 	private IToken defaultToken;
@@ -38,12 +36,11 @@ public class CSPWordRules extends RuleBasedScanner {
 		rules = rulesList.toArray(rules);
 		
 		
-		setDefaultReturnToken(defaultToken);
+		//setDefaultReturnToken(defaultToken);
 		setRules(rules);
 	}
 
 	private void startTokens(ColorManager colorManager) {
-		this.colorManager = colorManager;
 		this.wordTokenBold = new Token(new TextAttribute(colorManager.getColor(ICSPColorConstants.CSP_RESERVED_WORDS_GREEN),null, SWT.BOLD));
 		this.wordTokenUnbold = new Token(new TextAttribute(colorManager.getColor(ICSPColorConstants.CSP_RESERVED_WORDS_GREEN)));
 		this.defaultToken = new Token(new TextAttribute(colorManager.getColor(ICSPColorConstants.DEFAULT)));
