@@ -7,6 +7,7 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.Adapters;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.text.DocumentEvent;
 import org.eclipse.jface.text.IDocument;
@@ -16,10 +17,13 @@ import org.eclipse.jface.text.rules.FastPartitioner;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.editors.text.FileDocumentProvider;
+import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
 
+import br.ufcg.edu.csp.outline.CSPOutlinePage;
 
 
 public class CSPDocumentProvider extends FileDocumentProvider implements IDocumentListener {
@@ -46,6 +50,9 @@ public class CSPDocumentProvider extends FileDocumentProvider implements IDocume
 	@Override
 	public void documentChanged(DocumentEvent event) {
 		// TODO OutlineView update
+		IWorkbenchPart part = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActivePart();
+		CSPOutlinePage outlinePage = (CSPOutlinePage) Adapters.adapt(part, IContentOutlinePage.class);
+		outlinePage.updateContent();
 	
 	}
 	

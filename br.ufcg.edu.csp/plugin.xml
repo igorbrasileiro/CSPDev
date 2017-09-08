@@ -12,5 +12,13 @@
             name="Editor CSP">
       </editor>
    </extension>
+   <extension
+         point="org.eclipse.core.runtime.adapters">
+      <factory
+            adaptableType="br.ufcg.edu.csp.CSPEditor"
+            class="br.ufcg.edu.csp.outline.CSPEditorToOutlineAdapterFactory">
+         <adapter type="org.eclipse.ui.views.contentoutline.IContentOutlinePage"/>
+      </factory>
+   </extension>
 
 </plugin>
