@@ -42,7 +42,7 @@ public class ParserUtil {
 		CspLexer lexer  = new CspLexer((CharStream)reader);
 		TokenStream tokens = new CommonTokenStream(lexer);
 		CspParser parser = new CspParser(tokens);
-		//parser.setErrorHandler(new ExceptionErrorStrategy());
+		parser.setErrorHandler(new ExceptionErrorStrategy());
 		//TODO : ExceptionErrorStrategy
 		
 		return parser;

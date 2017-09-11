@@ -66,7 +66,7 @@ public class CSPWordRules extends RuleBasedScanner {
 	}
 	
 	private void addMultilineWords(ArrayList<IRule> list) {
-		// TODO: "[|", "|]"
+		// TODO: "[|", "|]" resolver com XMLTag do editor de xml
 		MultiLineRule op = new MultiLineRule("[|", "|]", wordTokenUnbold);
 		list.add(op);
 	}

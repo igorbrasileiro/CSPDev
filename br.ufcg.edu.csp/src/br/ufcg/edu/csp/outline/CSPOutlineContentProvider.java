@@ -98,16 +98,21 @@ public class CSPOutlineContentProvider implements ITreeContentProvider {
 	 */
 	private void getElements(Object obj, ArrayList<ExpressionNodeDecorator> list) {
 		if(obj instanceof CspParser.SpecContext){
+			// regra de muitos filhos
 			int children = ((ParseTree) obj).getChildCount();
 			for (int i = 0; i < children; i++) {
 				ParseTree node = ((ParseTree) obj).getChild(i);
 				getElements(node, list);
 			}
 		} else if(obj instanceof CspParser.DefinitionContext) {
+			// regra de filho unico
 			ParseTree node = ((ParseTree) obj).getChild(0);
 			getElements(node, list);
 		} else if(obj instanceof CspParser.SimpleDefinitionContext) {
-			String text = ((ParseTree) obj).getText();
+			// TODO assert entrando na regra de simple definition, falar com professor.
+			
+			// regra terminal para imprimir os processos
+			// debug String text = ((ParseTree) obj).getText();
 			list.add(new ExpressionNodeDecorator((ParseTree) obj));
 		}
 	}

@@ -23,6 +23,7 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.editors.text.FileDocumentProvider;
 import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
 
+import br.ufcg.edu.csp.errorReport.ReportErrorMarker;
 import br.ufcg.edu.csp.outline.CSPOutlinePage;
 
 
@@ -52,10 +53,10 @@ public class CSPDocumentProvider extends FileDocumentProvider implements IDocume
 		IWorkbenchPart part = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActivePart();
 		CSPOutlinePage outlinePage = (CSPOutlinePage) Adapters.adapt(part, IContentOutlinePage.class);
 		outlinePage.updateContent();
-	
+		// TODO ATUALIZAR ERROR, CHAMAR DAQUI
 	}
 	
-	private static File getEditorFile() {
+	public static File getEditorFile() {
 		IResource file = getEditorIFile();
 		if(file != null) {
 			return new File(file.getLocation().toString());
@@ -63,7 +64,7 @@ public class CSPDocumentProvider extends FileDocumentProvider implements IDocume
 		return null;
 	}
 	
-	private static IResource getEditorIFile() {
+	public static IResource getEditorIFile() {
 		IWorkbench iworkbench = PlatformUI.getWorkbench();
 
 		IWorkbenchWindow activeWorkbenchWindow = null;
@@ -88,7 +89,7 @@ public class CSPDocumentProvider extends FileDocumentProvider implements IDocume
 	}
 
 	
-	private static File[] findCSPFilesFromWorkspace() {
+	public static File[] findCSPFilesFromWorkspace() {
 		IWorkspace workspace = ResourcesPlugin.getWorkspace();  
 
 		IProject[] workspaceDirectory = workspace.getRoot().getProjects();
