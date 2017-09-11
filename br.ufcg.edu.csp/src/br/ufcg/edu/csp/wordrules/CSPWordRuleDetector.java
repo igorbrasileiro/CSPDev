@@ -6,7 +6,8 @@ public class CSPWordRuleDetector implements IWordDetector {
 
 	@Override
 	public boolean isWordStart(char c) {
-		return identifyCharacter(c);
+		return c == 'c' || c == 'a' || c == 'i' || c == 't' || c == 'e' || c == 'f' || c == 'd' || c == 'l' || c == 'w'
+				|| c == '&' || c == 'S' || c == 'o' || c == 'n' || c == '[' || c == '|';
 	}
 
 	@Override
