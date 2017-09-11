@@ -9,6 +9,7 @@ import org.eclipse.jface.text.rules.MultiLineRule;
 import org.eclipse.jface.text.rules.NumberRule;
 import org.eclipse.jface.text.rules.RuleBasedScanner;
 import org.eclipse.jface.text.rules.Token;
+import org.eclipse.jface.text.rules.WordPatternRule;
 import org.eclipse.jface.text.rules.WordRule;
 import org.eclipse.swt.SWT;
 
@@ -16,7 +17,7 @@ import org.eclipse.swt.SWT;
 public class CSPWordRules extends RuleBasedScanner {
 	private IToken wordTokenBold;
 	private IToken wordTokenUnbold;
-	private IToken defaultToken;
+	private Token defaultToken;
 	
 	
 	public CSPWordRules(ColorManager colorManager) {
@@ -30,11 +31,10 @@ public class CSPWordRules extends RuleBasedScanner {
 		
 		
 		// tem que ser o ultimo
-		addMultilineWords(rulesList);
+		//addMultilineWords(rulesList);
 		
 		IRule[] rules = new IRule[1];
 		rules = rulesList.toArray(rules);
-		
 		
 		//setDefaultReturnToken(defaultToken);
 		setRules(rules);
@@ -47,7 +47,7 @@ public class CSPWordRules extends RuleBasedScanner {
 	}
 	
 	private void addWords(ArrayList<IRule> list) {
-		WordRule wr = new WordRule(new CSPWordRuleDetector());
+		WordRule wr = new WordRule(new CSPWordRuleDetector(), defaultToken, false);
 		addBoldWords(wr);
 		addUnboldWords(wr);
 		list.add(wr);
@@ -65,12 +65,12 @@ public class CSPWordRules extends RuleBasedScanner {
 		}
 	}
 	
-	private void addMultilineWords(ArrayList<IRule> list) {
+	/*private void addMultilineWords(ArrayList<IRule> list) {
 		// TODO: "[|", "|]" resolver com XMLTag do editor de xml
-		MultiLineRule op = new MultiLineRule("[|", "|]", wordTokenUnbold);
+		WordPatternRule op = new WordPatternRule(new CSPWordRuleDetector(), "[|", "|]", wordTokenUnbold);
 		list.add(op);
 	}
-	
+	*/
 	private void addNumberRule(ArrayList<IRule> list) {
 		NumberRule nr = new NumberRule(wordTokenUnbold);
 		list.add(nr);
@@ -81,6 +81,6 @@ public class CSPWordRules extends RuleBasedScanner {
 	}
 	
 	private String[] getUnboldReservedWords() {
-		return new String[] { "STOP", "SKIP", "and", "or", "not", "|||", "[]", "|~|", "->"};
+		return new String[] { "STOP", "SKIP", "and", "or", "not", "|||", "[]", "|~|", "->", "[|", "|]" };
 	}
 }
