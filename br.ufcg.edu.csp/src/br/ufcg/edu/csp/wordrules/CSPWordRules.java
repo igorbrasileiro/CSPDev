@@ -5,11 +5,9 @@ import java.util.ArrayList;
 import org.eclipse.jface.text.TextAttribute;
 import org.eclipse.jface.text.rules.IRule;
 import org.eclipse.jface.text.rules.IToken;
-import org.eclipse.jface.text.rules.MultiLineRule;
 import org.eclipse.jface.text.rules.NumberRule;
 import org.eclipse.jface.text.rules.RuleBasedScanner;
 import org.eclipse.jface.text.rules.Token;
-import org.eclipse.jface.text.rules.WordPatternRule;
 import org.eclipse.jface.text.rules.WordRule;
 import org.eclipse.swt.SWT;
 
@@ -26,7 +24,7 @@ public class CSPWordRules extends RuleBasedScanner {
 		ArrayList<IRule> rulesList = new ArrayList<>();
 		
 		addWords(rulesList);
-		
+		//addMultipartWordRule(rulesList);
 		addNumberRuleToList(rulesList);
 		
 		IRule[] rules = new IRule[1];
@@ -51,7 +49,7 @@ public class CSPWordRules extends RuleBasedScanner {
 	private void addBoldWordsToList(ArrayList<IRule> list) {
 		WordRule wordRule;
 		for(String word : getBoldReservedWords()) {
-			wordRule = new WordRule(new CSPWordRuleDetector(word.substring(0, 1), word.substring(1)));
+			wordRule = new WordRule(new CSPWordRuleDetector(word));
 			wordRule.addWord(word, wordTokenBold);
 			list.add(wordRule);
 		}
@@ -60,11 +58,18 @@ public class CSPWordRules extends RuleBasedScanner {
 	private void addUnboldWordsToList(ArrayList<IRule> list) {
 		WordRule wordRule;
 		for(String word : getUnboldReservedWords()) {
-			wordRule = new WordRule(new CSPWordRuleDetector(word.substring(0, 1), word.substring(1)));
+			wordRule = new WordRule(new CSPWordRuleDetector(word));
 			wordRule.addWord(word, wordTokenUnbold);
 			list.add(wordRule);
 		}
 	}
+	
+	/*
+	private void addMultipartWordRule(ArrayList<IRule> list) {
+		WordPatternRule wpr = new WordPatternRule(new CSPMultipartWordRuleDectector("[|", "|]"), "[|", "|]", wordTokenUnbold);
+		list.add(wpr);
+	}
+	*/
 	
 	private void addNumberRuleToList(ArrayList<IRule> list) {
 		NumberRule nr = new NumberRule(wordTokenUnbold);

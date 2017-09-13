@@ -7,9 +7,9 @@ public class CSPWordRuleDetector implements IWordDetector {
 	private String startChar;
 	private String charPart;
 	
-	public CSPWordRuleDetector(String startChar, String charPart) {
-		this.startChar = startChar;
-		this.charPart = charPart;
+	public CSPWordRuleDetector(String word) {
+		this.startChar = word.substring(0, 1);
+		this.charPart = word.substring(1);
 	}
 
 	@Override
