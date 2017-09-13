@@ -27,11 +27,7 @@ public class CSPWordRules extends RuleBasedScanner {
 		
 		addWords(rulesList);
 		
-		addNumberRule(rulesList);
-		
-		
-		// tem que ser o ultimo
-		//addMultilineWords(rulesList);
+		addNumberRuleToList(rulesList);
 		
 		IRule[] rules = new IRule[1];
 		rules = rulesList.toArray(rules);
@@ -47,31 +43,30 @@ public class CSPWordRules extends RuleBasedScanner {
 	}
 	
 	private void addWords(ArrayList<IRule> list) {
-		WordRule wr = new WordRule(new CSPWordRuleDetector(), defaultToken, false);
-		addBoldWords(wr);
-		addUnboldWords(wr);
-		list.add(wr);
+		//WordRule wr = new WordRule(new CSPWordRuleDetector(), defaultToken, false);
+		addBoldWordsToList(list);
+		addUnboldWordsToList(list);
 	}
 	
-	private void addBoldWords(WordRule wr) {
+	private void addBoldWordsToList(ArrayList<IRule> list) {
+		WordRule wordRule;
 		for(String word : getBoldReservedWords()) {
-			wr.addWord(word, wordTokenBold);
+			wordRule = new WordRule(new CSPWordRuleDetector(word.substring(0, 1), word.substring(1)));
+			wordRule.addWord(word, wordTokenBold);
+			list.add(wordRule);
 		}
 	}
 	
-	private void addUnboldWords(WordRule wr) {
+	private void addUnboldWordsToList(ArrayList<IRule> list) {
+		WordRule wordRule;
 		for(String word : getUnboldReservedWords()) {
-			wr.addWord(word, wordTokenUnbold);
+			wordRule = new WordRule(new CSPWordRuleDetector(word.substring(0, 1), word.substring(1)));
+			wordRule.addWord(word, wordTokenUnbold);
+			list.add(wordRule);
 		}
 	}
 	
-	/*private void addMultilineWords(ArrayList<IRule> list) {
-		// TODO: "[|", "|]" resolver com XMLTag do editor de xml
-		WordPatternRule op = new WordPatternRule(new CSPWordRuleDetector(), "[|", "|]", wordTokenUnbold);
-		list.add(op);
-	}
-	*/
-	private void addNumberRule(ArrayList<IRule> list) {
+	private void addNumberRuleToList(ArrayList<IRule> list) {
 		NumberRule nr = new NumberRule(wordTokenUnbold);
 		list.add(nr);
 	}
@@ -81,6 +76,6 @@ public class CSPWordRules extends RuleBasedScanner {
 	}
 	
 	private String[] getUnboldReservedWords() {
-		return new String[] { "STOP", "SKIP", "and", "or", "not", "|||", "[]", "|~|", "->", "[|", "|]" };
+		return new String[] { "STOP", "SKIP", "and", "or", "not", "|||", "[]", "|~|", "->", "[|", "|]"}; // 
 	}
 }

@@ -3,16 +3,23 @@ package br.ufcg.edu.csp.wordrules;
 import org.eclipse.jface.text.rules.IWordDetector;
 
 public class CSPWordRuleDetector implements IWordDetector {
+	
+	private String startChar;
+	private String charPart;
+	
+	public CSPWordRuleDetector(String startChar, String charPart) {
+		this.startChar = startChar;
+		this.charPart = charPart;
+	}
 
 	@Override
 	public boolean isWordStart(char c) {
-		return c == 'c' || c == 'a' || c == 'i' || c == 't' || c == 'e' || c == 'f' || c == 'd' || c == 'l' || c == 'w'
-				|| c == '&' || c == 'S' || c == 'o' || c == 'n' || c == '[' || c == '|';
+		return startChar.startsWith(String.valueOf(c));
 	}
 
 	@Override
 	public boolean isWordPart(char c) {
-		return identifyCharacter(c);
+		return charPart.contains(String.valueOf(c));
 	}
 	
 	// TODO completar char das palavras reservadas
