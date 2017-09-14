@@ -52,8 +52,10 @@ public class CSPDocumentProvider extends FileDocumentProvider implements IDocume
 	public void documentChanged(DocumentEvent event) {
 		IWorkbenchPart part = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActivePart();
 		CSPOutlinePage outlinePage = (CSPOutlinePage) Adapters.adapt(part, IContentOutlinePage.class);
+		ReportErrorMarker.deleteMarkers();
 		outlinePage.updateContent();
 		// TODO ATUALIZAR ERROR, CHAMAR DAQUI
+		
 	}
 	
 	public static File getEditorFile() {

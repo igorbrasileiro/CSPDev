@@ -10,15 +10,15 @@ import org.eclipse.core.runtime.CoreException;
 import br.ufcg.edu.csp.CSPDocumentProvider;
 
 public class ReportErrorMarker {
-	
+
 	private static final int UPDATE_DIFERENCE_TIME = 15;
 	private static long lastTime = -1;
-	
+
 	public static void reportError(Parser recognizer) {
 		Token currentToken = recognizer.getCurrentToken();
 		String msg = "Report error. CurrentToken " + currentToken.getText() 
-			+ " linha: " + currentToken.getLine()+":"+ currentToken.getCharPositionInLine() 
-			+ ". expected " + recognizer.getExpectedTokens().toString(recognizer.getTokenNames());
+		+ " linha: " + currentToken.getLine()+":"+ currentToken.getCharPositionInLine() 
+		+ ". expected " + recognizer.getExpectedTokens().toString(recognizer.getTokenNames());
 
 		int lineNumber = currentToken.getLine();
 
@@ -28,7 +28,7 @@ public class ReportErrorMarker {
 			// TODO mudar esse currentTImeMillis por que fica consumindo memória demasiada
 			//if(Math.abs(lastTime - System.currentTimeMillis()) > UPDATE_DIFERENCE_TIME) {
 			//	lastTime = System.currentTimeMillis();
-			file.deleteMarkers(IMarker.PROBLEM, false, IResource.DEPTH_ONE);
+			deleteMarkers(file);
 			//}
 			marker = file.createMarker(IMarker.PROBLEM);
 			marker.setAttribute(IMarker.MESSAGE, msg);
@@ -39,5 +39,18 @@ public class ReportErrorMarker {
 			ee.printStackTrace();
 		}
 	}
+	//file.findMarkers(IMarker.PROBLEM, true, IResource.DEPTH_ZERO);
 
+	private static void deleteMarkers(IResource file){
+		try {
+			file.deleteMarkers(IMarker.PROBLEM, false, IResource.DEPTH_ONE);
+		} catch (CoreException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	public static void deleteMarkers(){
+		IResource file = CSPDocumentProvider.getEditorIFile();
+		deleteMarkers(file);
+	}
 }
