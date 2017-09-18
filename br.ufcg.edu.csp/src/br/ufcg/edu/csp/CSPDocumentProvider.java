@@ -29,6 +29,12 @@ import br.ufcg.edu.csp.outline.CSPOutlinePage;
 
 public class CSPDocumentProvider extends FileDocumentProvider implements IDocumentListener {
 
+	private ReportErrorMarker errorReport;
+
+	public CSPDocumentProvider() {
+		errorReport = ReportErrorMarker.getInstance();
+	}
+	
 	@Override
 	protected IDocument createDocument(Object element) throws CoreException {
 		IDocument document = super.createDocument(element);
@@ -51,11 +57,12 @@ public class CSPDocumentProvider extends FileDocumentProvider implements IDocume
 	@Override
 	public void documentChanged(DocumentEvent event) {
 		IWorkbenchPart part = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActivePart();
-		CSPOutlinePage outlinePage = (CSPOutlinePage) Adapters.adapt(part, IContentOutlinePage.class);
-		ReportErrorMarker.deleteMarkers();
+		// limpar o array dos marcadores
+		errorReport.cleanErrorList();
+		CSPOutlinePage outlinePage = (CSPOutlinePage) Adapters.adapt(part, IContentOutlinePage.class);// aqui faz o parse 
 		outlinePage.updateContent();
-		// TODO ATUALIZAR ERROR, CHAMAR DAQUI
 		
+		errorReport.reportError();
 	}
 	
 	public static File getEditorFile() {

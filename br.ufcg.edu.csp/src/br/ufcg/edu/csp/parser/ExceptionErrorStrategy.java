@@ -12,6 +12,11 @@ import br.ufcg.edu.csp.errorReport.ReportErrorMarker;
 
 public class ExceptionErrorStrategy extends DefaultErrorStrategy {
 	
+	private ReportErrorMarker errorReport;
+
+	public ExceptionErrorStrategy() {
+		errorReport = ReportErrorMarker.getInstance();
+	}
 	
 	@Override
 	public void recover(Parser recognizer, RecognitionException e) {
@@ -50,7 +55,7 @@ public class ExceptionErrorStrategy extends DefaultErrorStrategy {
 	@SuppressWarnings("deprecation")
 	@Override
 	public void reportError(Parser recognizer, RecognitionException e) {
-		ReportErrorMarker.reportError(recognizer);
+		errorReport.addError(recognizer);
 	}
 
 	/*
@@ -63,6 +68,4 @@ public class ExceptionErrorStrategy extends DefaultErrorStrategy {
     	System.out.println(msg);
     }
 	 */
-
-
 }
