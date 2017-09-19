@@ -104,7 +104,8 @@ public class CSPDocumentProvider extends FileDocumentProvider implements IDocume
 		IProject[] workspaceDirectory = workspace.getRoot().getProjects();
 		ArrayList<File> files = new ArrayList<>();
 		for(IProject projeto : workspaceDirectory) {
-			addFilesToListFromArray(files, encontraFileEm(new File(projeto.getLocation().toString())));
+			File[] filesArray = encontraFileEm(new File(projeto.getLocation().toString()));
+			addFilesToListFromArray(files, filesArray);
 		}
 
 		File[] retorno = new File[1];

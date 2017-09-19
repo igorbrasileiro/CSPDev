@@ -81,6 +81,6 @@ public class CSPWordRules extends RuleBasedScanner {
 	}
 	
 	private String[] getUnboldReservedWords() {
-		return new String[] { "STOP", "SKIP", "and", "or", "not", "|||", "[]", "|~|", "->", "[|", "|]"}; // 
+		return new String[] { "STOP", "SKIP", "and", "or", "not", "|||", "[]", "|~|", "->", "[|", "|]", "[(", ")]"}; // 
 	}
 }
