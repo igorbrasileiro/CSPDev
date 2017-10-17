@@ -19,17 +19,24 @@ public class FDRServices {
 		assertTeste.execute(null);
 		System.out.println(assertTeste.passed());
 	 */
+	/**
+	 * This method return a list with assertions strings from process given. 
+	 * First string is a Deadlock assertion. Second string is a Divergence assertion.
+	 * @param processName - the name of process that will be checked
+	 * @return ArrayList<String> 
+	 */
 	public ArrayList<String> checkProcessAssertions(String processName) {
 		ArrayList<String> result = new ArrayList<>();
 		
 		// criar os 3 métodos
 		result.add(checkDeadlockFree(processName));
-		
+		result.add(checkDeterministic(processName));
 		
 		
 		return result;
 	}
-	
+	// necessários deadlock, livelock e deterministic 
+	//TODO:  livelock
 	
 	private String checkDeadlockFree(String processName) {
 		// :[deadlock free [FD]]
@@ -53,6 +60,16 @@ public class FDRServices {
 		return result;
 	}
 	
+	private String checkDeterministic(String processName) {
+		//assert P :[deterministic]
+		String assertString = processName + " " + ":[deterministic [FD]]";
+		
+		Assertion deterministicAssert = getAssertion(assertString);
+		
+		String result = "Deterministic: " + (deterministicAssert.passed() ? "Passed" : "Failed");
+		
+		return result;
+	}
 	
 	private Assertion getAssertion(String assertion) {
 		Assertion newAssertion = session.parseAssertion(assertion).result();

@@ -1,5 +1,6 @@
 package br.ufcg.edu.csp;
 
+import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.editors.text.TextEditor;
 
 import br.ufcg.edu.csp.wordrules.ColorManager;
