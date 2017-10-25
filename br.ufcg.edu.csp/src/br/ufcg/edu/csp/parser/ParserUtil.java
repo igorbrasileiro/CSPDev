@@ -4,11 +4,14 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.List;
 
 import org.antlr.v4.runtime.ANTLRInputStream;
+import org.antlr.v4.runtime.BufferedTokenStream;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.Parser;
+import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.TokenStream;
 
 public class ParserUtil {
@@ -43,7 +46,14 @@ public class ParserUtil {
 		TokenStream tokens = new CommonTokenStream(lexer);
 		CspParser parser = new CspParser(tokens);
 		parser.setErrorHandler(new ExceptionErrorStrategy());
-		//TODO : ExceptionErrorStrategy
+		
+		// apagar
+		//Token t1 = tokens.LT(4);
+		//Token t2 = tokens.LT(5);
+		//t2.getStopIndex();
+		//Token t1 = ((BufferedTokenStream) tokens).get(4);
+		//reader.
+		
 		
 		return parser;
 	}

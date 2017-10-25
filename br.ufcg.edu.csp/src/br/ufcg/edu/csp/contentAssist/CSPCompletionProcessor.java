@@ -2,6 +2,7 @@ package br.ufcg.edu.csp.contentAssist;
 
 import java.io.File;
 
+import org.antlr.v4.runtime.Token;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.ITextViewer;
@@ -12,29 +13,25 @@ import org.eclipse.jface.text.contentassist.IContextInformationValidator;
 
 import br.ufcg.edu.csp.CSPDocumentProvider;
 import br.ufcg.edu.csp.fdrAnalyser.FDRServices;
-import uk.ac.ox.cs.fdr.fdr;
 
 public class CSPCompletionProcessor implements IContentAssistProcessor {
 
 	//private static final char[] autoActivationChars = new char[] {'.', ' '};
 	private FDRServices fdrService;
 	
-	// e é o método invocado para gerar o conteudo
+	// e ï¿½ o mï¿½todo invocado para gerar o conteudo
 	@Override
 	public ICompletionProposal[] computeCompletionProposals(ITextViewer viewer, int offset) {
 		// TODO Auto-generated method stub
-		loadFile();
+		//loadFile();
+		
+		// PARA PEGAR O TOKEN
+		//Token t1 = tokens.LT(4);
+		//Token t2 = tokens.LT(5);
+		//t2.getStopIndex();
+		// preciso pegar o contexto do token para ver se Ã© processo
 		
 		IDocument doc = viewer.getDocument();
-		try {
-			String processName = doc.get(offset, 5);
-			
-			
-			
-		} catch (BadLocationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 		
 		return null;
 	}
@@ -42,7 +39,10 @@ public class CSPCompletionProcessor implements IContentAssistProcessor {
 	private void loadFile() {
 		File editorFile = CSPDocumentProvider.getEditorFile();
 		String fileName = editorFile.getAbsolutePath();
-		fdrService = new FDRServices(fileName);
+		if(fdrService == null) {
+			fdrService = new FDRServices();
+		}
+		fdrService.loadFile(fileName);
 	}
 
 	@Override
@@ -51,7 +51,7 @@ public class CSPCompletionProcessor implements IContentAssistProcessor {
 		return null;
 	}
 
-	// ativado quando a tecla autoActivate é acionada
+	// ativado quando a tecla autoActivate ï¿½ acionada
 	@Override
 	public char[] getCompletionProposalAutoActivationCharacters() {
 		// TODO Auto-generated method stub
