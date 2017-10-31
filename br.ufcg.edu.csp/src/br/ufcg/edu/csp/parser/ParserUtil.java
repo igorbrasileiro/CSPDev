@@ -11,8 +11,14 @@ import org.antlr.v4.runtime.BufferedTokenStream;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.Parser;
+import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.TokenStream;
+import org.eclipse.jface.text.BadLocationException;
+import org.eclipse.jface.text.IDocument;
+import org.eclipse.jface.text.IRegion;
+
+import br.ufcg.edu.csp.CSPDocumentProvider;
 
 public class ParserUtil {
 	public static Parser parse(File file) {
@@ -56,6 +62,43 @@ public class ParserUtil {
 		
 		
 		return parser;
+	}
+	
+	public static CspParser.SpecContext getRootFromTextEditor() {
+		CspParser parser = (CspParser) ParserUtil.getParserFromText(CSPDocumentProvider.getTextFromEditor());
+		CspParser.SpecContext tree = parser.spec();
+		
+		return tree;
+	}
+	
+	public static CspParser.SimpleDefinitionContext getProcessNodeAt(int docOffset, ParserRuleContext startNode, IDocument doc, NodeAssist node) {
+		
+		try {
+			int lineNum = doc.getLineOfOffset(docOffset);
+			int lineBeingOffset = doc.getLineOffset(lineNum);
+			int offsetInLine = docOffset - lineBeingOffset;
+			
+			String lineText = getLineText(doc, docOffset);
+//			String processName = lineText.split;
+			//TODO achar uma forma de encontrar o No e Texto
+			//int last = startNode.getStart().getStartIndex();
+			
+		} catch (BadLocationException e) {
+			return null;
+		}
+		
+		
+		
+		return null;
+	}
+	
+	private static String getLineText (IDocument doc, int docOffset) {
+		try {
+			IRegion lineRegion = doc.getLineInformationOfOffset(docOffset);
+			return doc.get(lineRegion.getOffset(), lineRegion.getLength());
+		} catch (Exception e) {
+			return null;
+		}
 	}
 
 }

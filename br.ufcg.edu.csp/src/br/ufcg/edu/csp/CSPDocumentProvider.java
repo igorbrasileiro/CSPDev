@@ -14,6 +14,7 @@ import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.IDocumentListener;
 import org.eclipse.jface.text.IDocumentPartitioner;
 import org.eclipse.jface.text.rules.FastPartitioner;
+import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPage;
@@ -21,6 +22,8 @@ import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.editors.text.FileDocumentProvider;
+import org.eclipse.ui.texteditor.AbstractTextEditor;
+import org.eclipse.ui.texteditor.IDocumentProvider;
 import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
 
 import br.ufcg.edu.csp.errorReport.ReportErrorMarker;
@@ -155,4 +158,24 @@ public class CSPDocumentProvider extends FileDocumentProvider implements IDocume
 		return files;
 	}
 
+	public static String getTextFromEditor() {
+		try{
+			IEditorPart part = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
+
+			AbstractTextEditor compEditor = (AbstractTextEditor)part;
+
+			IEditorInput input = compEditor.getEditorInput();
+
+			IDocumentProvider provider = compEditor.getDocumentProvider();
+
+			IDocument document = provider.getDocument(input);
+
+
+			return document.get();
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
+		return "sem documento encontrado";
+	}
+	
 }

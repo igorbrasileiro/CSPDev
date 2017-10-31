@@ -2,6 +2,7 @@ package br.ufcg.edu.csp.contentAssist;
 
 import java.io.File;
 
+import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.Token;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.IDocument;
@@ -15,6 +16,9 @@ import org.eclipse.swt.widgets.Shell;
 
 import br.ufcg.edu.csp.CSPDocumentProvider;
 import br.ufcg.edu.csp.fdrAnalyser.FDRServices;
+import br.ufcg.edu.csp.parser.CspParser;
+import br.ufcg.edu.csp.parser.NodeAssist;
+import br.ufcg.edu.csp.parser.ParserUtil;
 
 public class CSPCompletionProcessor implements IContentAssistProcessor {
 
@@ -25,17 +29,25 @@ public class CSPCompletionProcessor implements IContentAssistProcessor {
 	@Override
 	public ICompletionProposal[] computeCompletionProposals(ITextViewer viewer, int offset) {
 		// TODO Auto-generated method stub
-		loadFile();
 		
 		IDocument doc = viewer.getDocument();
 		
-		try {
-			String txt = doc.get(offset, -7);
-		} catch (BadLocationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		loadFile();
 		
+		// encontrar primeiro no da arvore
+		CspParser.SpecContext root = ParserUtil.getRootFromTextEditor();
+		
+		NodeAssist assistNode = new NodeAssist();
+		assistNode.docOffset = offset;
+		assistNode.docText = doc.get();
+		assistNode.parser = (ParserRuleContext) root;
+		
+		
+		ParserUtil.getProcessNodeAt(offset, root, doc, assistNode);
+		
+		// encontrar node com offset
+		
+				
 		Rectangle rect = new Rectangle(110,220,200,110);
 		InfoPopup pop = new InfoPopup( new Shell() , rect ,"Process " + " Information","Select and press ESC to close");
 		pop.setText("Exemplo de Teste");

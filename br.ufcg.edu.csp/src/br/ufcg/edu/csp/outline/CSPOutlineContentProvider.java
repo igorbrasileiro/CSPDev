@@ -13,6 +13,7 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.texteditor.AbstractTextEditor;
 import org.eclipse.ui.texteditor.IDocumentProvider;
 
+import br.ufcg.edu.csp.CSPDocumentProvider;
 import br.ufcg.edu.csp.parser.CspParser;
 import br.ufcg.edu.csp.parser.ParserUtil;
 
@@ -36,31 +37,9 @@ public class CSPOutlineContentProvider implements ITreeContentProvider {
 	}
 
 
-	private String getTextFromEditor() {
-		try{
-			IEditorPart part = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
-
-			AbstractTextEditor compEditor = (AbstractTextEditor)part;
-
-			IEditorInput input = compEditor.getEditorInput();
-
-			IDocumentProvider provider = compEditor.getDocumentProvider();
-
-			IDocument document = provider.getDocument(input);
-
-
-			return document.get();
-		} catch (Exception e) {
-			System.out.println(e.getMessage());
-		}
-		return "sem documento encontrado";
-	}
 
 	public ParserRuleContext getTree() {
-		CspParser parser = (CspParser) ParserUtil.getParserFromText(getTextFromEditor());
-		CspParser.SpecContext tree = parser.spec();
-		
-		return tree; // nao pode retornar null, impede de criar a tree;
+		return ParserUtil.getRootFromTextEditor(); // nao pode retornar null, impede de criar a tree;
 	}
 
 	@Override
