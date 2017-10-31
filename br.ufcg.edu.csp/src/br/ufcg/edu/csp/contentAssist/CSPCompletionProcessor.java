@@ -10,6 +10,8 @@ import org.eclipse.jface.text.contentassist.ICompletionProposal;
 import org.eclipse.jface.text.contentassist.IContentAssistProcessor;
 import org.eclipse.jface.text.contentassist.IContextInformation;
 import org.eclipse.jface.text.contentassist.IContextInformationValidator;
+import org.eclipse.swt.graphics.Rectangle;
+import org.eclipse.swt.widgets.Shell;
 
 import br.ufcg.edu.csp.CSPDocumentProvider;
 import br.ufcg.edu.csp.fdrAnalyser.FDRServices;
@@ -23,26 +25,29 @@ public class CSPCompletionProcessor implements IContentAssistProcessor {
 	@Override
 	public ICompletionProposal[] computeCompletionProposals(ITextViewer viewer, int offset) {
 		// TODO Auto-generated method stub
-		//loadFile();
-		
-		// PARA PEGAR O TOKEN
-		//Token t1 = tokens.LT(4);
-		//Token t2 = tokens.LT(5);
-		//t2.getStopIndex();
-		// preciso pegar o contexto do token para ver se é processo
+		loadFile();
 		
 		IDocument doc = viewer.getDocument();
 		
-		return null;
+		try {
+			String txt = doc.get(offset, -7);
+		} catch (BadLocationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		Rectangle rect = new Rectangle(110,220,200,110);
+		InfoPopup pop = new InfoPopup( new Shell() , rect ,"Process " + " Information","Select and press ESC to close");
+		pop.setText("Exemplo de Teste");
+		pop.open();
+		
+		return new ICompletionProposal[0];
 	}
 
 	private void loadFile() {
 		File editorFile = CSPDocumentProvider.getEditorFile();
 		String fileName = editorFile.getAbsolutePath();
-		if(fdrService == null) {
-			fdrService = new FDRServices();
-		}
-		fdrService.loadFile(fileName);
+		fdrService = new FDRServices(fileName);
 	}
 
 	@Override

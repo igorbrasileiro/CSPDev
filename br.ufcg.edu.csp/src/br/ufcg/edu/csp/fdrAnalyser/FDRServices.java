@@ -9,12 +9,17 @@ public class FDRServices {
 
 	private Session session;
 
-	public FDRServices() {
+	public FDRServices(String fileName) {
 		session = new Session();
+		
+		loadFile(fileName);
 		//System.loadLibrary("");
 	}
 	
-	public void loadFile(String fileName) {
+	private void loadFile(String fileName) {
+		if(session == null ) {
+			session = new Session();
+		}
 		session.loadFile(fileName);
 	}
 	

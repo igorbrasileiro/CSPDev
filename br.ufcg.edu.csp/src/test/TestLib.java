@@ -8,7 +8,7 @@ public class TestLib {
 		props.keySet().stream().filter( o -> o.toString().startsWith("java"))
 		 .forEach( k -> System.out.println(k.toString() + " = " + props.getProperty(k.toString())));
 		//forEach(k -> System.out.println(k.toString()));
-		System.loadLibrary("libfdr_java.dll");
+		System.loadLibrary("libfdr_java");
 		uk.ac.ox.cs.fdr.fdr.libraryInit();
 		System.out.println("Funcionou");
 	}
