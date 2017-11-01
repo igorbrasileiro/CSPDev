@@ -20,7 +20,11 @@ public class FDRServices {
 		if(session == null ) {
 			session = new Session();
 		}
-		session.loadFile(fileName);
+		try {
+			session.loadFile(fileName);
+		} catch(RuntimeException re) {
+			re.printStackTrace();
+		}
 	}
 	
 	/*
@@ -40,7 +44,7 @@ public class FDRServices {
 		// criar os 3 métodos
 		result.add(checkDeadlockFree(processName));
 		result.add(checkDeterministic(processName));
-		
+		result.add(checkDivergenceFree(processName));
 		
 		return result;
 	}
@@ -52,8 +56,11 @@ public class FDRServices {
 		String assertString = processName+ " " + ":[deadlock free [FD]]";
 		
 		Assertion deadlockAssert = getAssertion(assertString);
+		String result = null;
+		if(deadlockAssert != null) {
+			 result = "Deadlock: " + (deadlockAssert.passed() ? "Passed" : "Failed");
+		}
 		
-		String result = "Deadlock: " + (deadlockAssert.passed() ? "Passed" : "Failed");
 		
 		return result;
 	}
@@ -64,7 +71,11 @@ public class FDRServices {
 		
 		Assertion divergenceAssert = getAssertion(assertString);
 		
-		String result = "Divergence " + (divergenceAssert.passed() ? "Passed" : "Failed");
+		String result = null;
+		if(divergenceAssert != null) {
+			result = "Divergence " + (divergenceAssert.passed() ? "Passed" : "Failed");
+		}
+		
 		
 		return result;
 	}
@@ -74,8 +85,10 @@ public class FDRServices {
 		String assertString = processName + " " + ":[deterministic [FD]]";
 		
 		Assertion deterministicAssert = getAssertion(assertString);
-		
-		String result = "Deterministic: " + (deterministicAssert.passed() ? "Passed" : "Failed");
+		String result = null;
+		if(deterministicAssert != null ) {
+			result = "Deterministic: " + (deterministicAssert.passed() ? "Passed" : "Failed");
+		}
 		
 		return result;
 	}
