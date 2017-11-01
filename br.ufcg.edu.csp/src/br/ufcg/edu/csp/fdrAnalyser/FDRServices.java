@@ -73,7 +73,7 @@ public class FDRServices {
 		
 		String result = null;
 		if(divergenceAssert != null) {
-			result = "Divergence " + (divergenceAssert.passed() ? "Passed" : "Failed");
+			result = "Divergence: " + (divergenceAssert.passed() ? "Passed" : "Failed");
 		}
 		
 		
