@@ -94,9 +94,13 @@ public class FDRServices {
 	}
 	
 	private Assertion getAssertion(String assertion) {
-		Assertion newAssertion = session.parseAssertion(assertion).result();
-		newAssertion.execute(null);
+		try {
+			Assertion newAssertion = session.parseAssertion(assertion).result();
+			newAssertion.execute(null);
+			return newAssertion;
+		} catch (RuntimeException re) {
+			return null;
+		}
 		
-		return newAssertion;
 	}
 }
