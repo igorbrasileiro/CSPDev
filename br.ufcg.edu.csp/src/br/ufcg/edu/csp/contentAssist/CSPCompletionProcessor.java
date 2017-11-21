@@ -60,7 +60,7 @@ public class CSPCompletionProcessor implements IContentAssistProcessor {
 		
 		
 		Rectangle rect = new Rectangle(110,220,200,110);
-		InfoPopup pop = new InfoPopup( new Shell() , rect ,"Process " + processName +" Information","Select and press ESC to close");
+		InfoPopup pop = new InfoPopup( new Shell() , rect ," Process " + processName +" Information","Select and press ESC to close");
 		pop.setText(msg);
 		pop.open();
 		
