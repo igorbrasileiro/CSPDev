@@ -21,4 +21,110 @@
       </factory>
    </extension>
 
+
+   <extension
+         point="org.eclipse.ui.commands">
+      <command
+            categoryId="br.ufcg.edu.csp.commands.category"
+            defaultHandler="br.ufcg.edu.csp.handlers.CSPMenuCommandHandler"
+            id="br.ufcg.edu.csp.commands.deadlock"
+            name="Deadlock">
+      </command>
+      <command
+            categoryId="br.ufcg.edu.csp.commands.category"
+            defaultHandler="br.ufcg.edu.csp.handlers.CSPMenuCommandHandler"
+            id="br.ufcg.edu.csp.commands.deterministic"
+            name="Deterministic">
+      </command>
+      <command
+            categoryId="br.ufcg.edu.csp.commands.category"
+            defaultHandler="br.ufcg.edu.csp.handlers.CSPMenuCommandHandler"
+            id="br.ufcg.edu.csp.commands.divergence"
+            name="Divergence">
+      </command>
+   </extension>
+     
+   <extension
+         point="org.eclipse.ui.bindings">
+      <key
+            commandId="br.ufcg.edu.csp.commands.deadlock"
+            contextId="org.eclipse.ui.contexts.window"
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+            sequence="M1+6">
+      </key>
+      <key
+            commandId="br.ufcg.edu.csp.commands.deterministic"
+            contextId="org.eclipse.ui.contexts.window"
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+            sequence="M1+7">
+      </key>
+      <key
+            commandId="br.ufcg.edu.csp.commands.divergence"
+            contextId="org.eclipse.ui.contexts.window"
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+            sequence="M1+8">
+      </key>
+   </extension>
+  
+   <extension
+         point="org.eclipse.ui.menus">
+      <menuContribution
+            locationURI="popup:#TextEditorContext?after=additions">
+         <menu
+               id="br.ufcg.edu.csp.menus.verificationProcessMenu"
+               label="Verification Process"
+               mnemonic="M">
+            <command
+                  commandId="br.ufcg.edu.csp.commands.deadlock"
+                  id="br.ufcg.edu.csp.menus.deadlockCommand"
+                  mnemonic="S">
+            </command>
+            <command
+                  commandId="br.ufcg.edu.csp.commands.deterministic"
+                  id="br.ufcg.edu.csp.menus.deterministicCommand"
+                  mnemonic="S">
+            </command>
+            <command
+                  commandId="br.ufcg.edu.csp.commands.divergence"
+                  id="br.ufcg.edu.csp.menus.divergenceCommand"
+                  mnemonic="S">
+            </command>
+         </menu>
+      </menuContribution>
+   </extension>
+   
+   <!-- apagar daqui para baixo -->
+   	<extension point="org.eclipse.ui.commands">
+	    <command id="org.eclipse.ui.examples.menus.scramble.text"
+	            defaultHandler="org.eclipse.ui.examples.menus.internal.ScrambleTextHandler"
+	            name="%ScrambleText.name"
+	            description="%ScrambleText.description" />
+	</extension>
+	<extension point="org.eclipse.ui.menus">
+	    <menuContribution locationURI="popup:#TextEditorContext?after=additions">
+         <command
+               commandId="org.eclipse.ui.examples.menus.scramble.text"
+               mnemonic="%ScrambleText.mnemonic">
+         </command>
+	    </menuContribution>
+	</extension>
+	
+<!-- Teste -->
+<!-- funciona no project explorer -->
+   <extension
+         point="org.eclipse.ui.menus">
+      <menuContribution
+         locationURI=
+         "popup:org.eclipse.ui.navigator.ProjectExplorer#PopupMenu?after=additions">
+         <command
+               commandId="myplugin.command.mycommand"
+               label="Run mycommand"
+               mnemonic="M1+P"
+               tooltip="Do something with this project">
+         </command>
+      </menuContribution>
+   </extension>
+	
+  
+
 </plugin>
