@@ -20,8 +20,9 @@ public class TesteHandler extends AbstractHandler {
 	
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
-		
+
 		// verificar o tipo do botao - deadlock - divergencia ..
+		// pesquisar todos os processos
 		// listar todos os processos e criar botoes
 		
 		String eventId = event.getCommand().getId();

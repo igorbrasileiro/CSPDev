@@ -51,7 +51,7 @@ public class FDRServices {
 	// necessários deadlock, livelock e deterministic 
 	//TODO:  livelock
 	
-	private String checkDeadlockFree(String processName) {
+	public String checkDeadlockFree(String processName) {
 		// :[deadlock free [FD]]
 		String assertString = processName+ " " + ":[deadlock free [FD]]";
 		
@@ -65,7 +65,7 @@ public class FDRServices {
 		return result;
 	}
 	
-	private String checkDivergenceFree(String processName) {
+	public String checkDivergenceFree(String processName) {
 		// :[divergence free [FD]]
 		String assertString = processName+ " " + ":[divergence free [FD]]";
 		
@@ -80,7 +80,7 @@ public class FDRServices {
 		return result;
 	}
 	
-	private String checkDeterministic(String processName) {
+	public String checkDeterministic(String processName) {
 		//assert P :[deterministic]
 		String assertString = processName + " " + ":[deterministic [FD]]";
 		
