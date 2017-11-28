@@ -18,7 +18,6 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 
 import br.ufcg.edu.csp.CSPDocumentProvider;
-import br.ufcg.edu.csp.contentAssist.InfoPopup;
 import br.ufcg.edu.csp.fdrAnalyser.FDRServices;
 import br.ufcg.edu.csp.parser.CspParser;
 import br.ufcg.edu.csp.parser.ParserUtil;

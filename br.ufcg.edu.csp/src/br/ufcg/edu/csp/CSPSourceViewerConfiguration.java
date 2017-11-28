@@ -19,7 +19,6 @@ import org.eclipse.jface.text.source.IAnnotationHover;
 import org.eclipse.jface.text.source.ISourceViewer;
 import org.eclipse.jface.text.source.SourceViewerConfiguration;
 
-import br.ufcg.edu.csp.contentAssist.CSPContentAssistant;
 import br.ufcg.edu.csp.wordrules.CSPWordRules;
 import br.ufcg.edu.csp.wordrules.ColorManager;
 import br.ufcg.edu.csp.wordrules.ICSPColorConstants;
@@ -29,11 +28,9 @@ public class CSPSourceViewerConfiguration extends SourceViewerConfiguration {
 	
 	private ColorManager colorManager;
 	private CSPWordRules wordRules;
-	private CSPContentAssistant contentAssistant;
 	
 	public CSPSourceViewerConfiguration() {
 		colorManager = new ColorManager();
-		contentAssistant = new CSPContentAssistant();
 	}
 	
 	// se precisar
@@ -77,17 +74,6 @@ public class CSPSourceViewerConfiguration extends SourceViewerConfiguration {
 		}
 		
 		return wordRules;
-	}
-	
-	@Override
-	public IContentAssistant getContentAssistant(ISourceViewer sourceViewer) {
-		// TODO Auto-generated method stub
-		if(contentAssistant == null) {
-			contentAssistant = new CSPContentAssistant();
-		}
-		
-		contentAssistant.setInformationControlCreator(getInformationControlCreator(sourceViewer));
-		return contentAssistant;
 	}
 	
 	private ITokenScanner getCSPComment() {

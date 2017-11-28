@@ -10,7 +10,6 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 
-import br.ufcg.edu.csp.contentAssist.InfoPopup;
 
 
 /**This is the test harness class to test the infopopup dialog.
@@ -34,9 +33,9 @@ public class TestInfoPopup
 			{
 				//You can set the sixe of the Rectangle
 				Rectangle rect = new Rectangle(50,220,200,110);
-				InfoPopup pop = new InfoPopup( new Shell() , rect ,"Information for you","Select and press ESC to close");
-				pop.setText("This is a special case of info popup dialog box which is similar to Eclipse InfoPopup.");
-				pop.open();
+				//InfoPopup pop = new InfoPopup( new Shell() , rect ,"Information for you","Select and press ESC to close");
+				//pop.setText("This is a special case of info popup dialog box which is similar to Eclipse InfoPopup.");
+				//pop.open();
 			}
 		}
 		);
