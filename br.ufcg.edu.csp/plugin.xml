@@ -93,7 +93,7 @@
       </menuContribution>
    </extension>
    
-   <!-- apagar daqui para baixo -->
+<!--   
    	<extension point="org.eclipse.ui.commands">
 	    <command id="org.eclipse.ui.examples.menus.scramble.text"
 	            defaultHandler="org.eclipse.ui.examples.menus.internal.ScrambleTextHandler"
@@ -108,9 +108,7 @@
          </command>
 	    </menuContribution>
 	</extension>
-	
-<!-- Teste -->
-<!-- funciona no project explorer -->
+
    <extension
          point="org.eclipse.ui.menus">
       <menuContribution
@@ -123,7 +121,7 @@
                tooltip="Do something with this project">
          </command>
       </menuContribution>
-   </extension>
+   </extension> -->
 	
   
 
