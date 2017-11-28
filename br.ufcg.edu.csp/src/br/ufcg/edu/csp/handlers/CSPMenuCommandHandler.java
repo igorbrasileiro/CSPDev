@@ -12,12 +12,15 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Point;
-import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 
 import br.ufcg.edu.csp.CSPDocumentProvider;
+import br.ufcg.edu.csp.fdrAnalyser.DeadlockChecker;
+import br.ufcg.edu.csp.fdrAnalyser.DeterministicChecker;
+import br.ufcg.edu.csp.fdrAnalyser.DivergenceChecker;
+import br.ufcg.edu.csp.fdrAnalyser.FDRChecker;
 import br.ufcg.edu.csp.fdrAnalyser.FDRServices;
 import br.ufcg.edu.csp.parser.CspParser;
 import br.ufcg.edu.csp.parser.ParserUtil;
@@ -43,57 +46,21 @@ public class CSPMenuCommandHandler extends AbstractHandler {
 		final Shell shell = new Shell (display, SWT.DIALOG_TRIM); 
 
 		// verificar o tipo do botao - deadlock - divergencia ..
-		int startY = 10;
+		
+		FDRChecker checker = null;
+		
 		if(eventId.equals(deadlock)) {
-			for(String process : processList) {
-				Button btn = new Button( shell , SWT.PUSH );
-				btn.setText(process);
-				btn.setBounds(90, startY, 200, 30);
-				startY += 40; // 10 from top + 30 height from top button
-
-				btn.addSelectionListener( new SelectionAdapter() {
-					public void widgetSelected(SelectionEvent se) {
-						//You can set the sixe of the Rectangle
-						MessageDialog.openInformation(shell, "Process Information", fdrService.checkDeadlockFree(process));
-					}
-				});
-
-			}
+			checker = new DeadlockChecker();
 		} else if(eventId.equals(deterministic)) {
-			for(String process : processList) {
-				Button btn = new Button( shell , SWT.PUSH );
-				btn.setText(process);
-				btn.setBounds(90, startY, 200, 30);
-				startY += 40; // 10 from top + 30 height from top button
-
-				btn.addSelectionListener( new SelectionAdapter() {
-					public void widgetSelected(SelectionEvent se) {
-						//You can set the sixe of the Rectangle
-						MessageDialog.openInformation(shell, "Process Information", fdrService.checkDeterministic(process));
-					}
-				});
-
-			}
+			checker = new DeterministicChecker();
 		} else if(eventId.equals(divergence)) {
-			for(String process : processList) {
-				Button btn = new Button( shell , SWT.PUSH );
-				btn.setText(process);
-				btn.setBounds(90, startY, 200, 30);
-				startY += 40; // 10 from top + 30 height from top button
-
-				btn.addSelectionListener( new SelectionAdapter() {
-					public void widgetSelected(SelectionEvent se) {
-						//You can set the sixe of the Rectangle
-						MessageDialog.openInformation(shell, "Process Information", fdrService.checkDivergenceFree(process));
-					}
-				});
-
-			}
-		} else {
-			MessageDialog.openError(shell, "Error", "Ocurred a error at verification Proncess");
+			checker = new DivergenceChecker();
 		}
 
-
+		if(checker != null) {
+			createProcessButtons(checker, shell, processList);
+		}
+		
 		shell.layout(true, true);
 		final Point newSize = shell.computeSize(SWT.DEFAULT, SWT.DEFAULT, true);
 		newSize.x += 90;
@@ -141,6 +108,26 @@ public class CSPMenuCommandHandler extends AbstractHandler {
 		}
 	}
 
+	private void createProcessButtons(FDRChecker checker, Shell shell, ArrayList<String> processList) {
+		int startY = 10;
+		if(checker != null) {
+			for(String processName : processList) {
+				Button btn = new Button( shell , SWT.PUSH );
+				btn.setText(processName);
+				btn.setBounds(90, startY, 200, 30);
+				startY += 40; // 10 from top + 30 height from top button
+
+				btn.addSelectionListener( new SelectionAdapter() {
+					public void widgetSelected(SelectionEvent se) {
+						//You can set the sixe of the Rectangle
+						MessageDialog.openInformation(shell, "Process Information", checker.checkProcess(fdrService, processName));
+					}
+				});
+
+			}
+		}
+	}
+	
 	private void loadFile() {
 		File editorFile = CSPDocumentProvider.getEditorFile();
 		String fileName = editorFile.getAbsolutePath();

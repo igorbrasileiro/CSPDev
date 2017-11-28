@@ -59,13 +59,18 @@ public class CSPDocumentProvider extends FileDocumentProvider implements IDocume
 
 	@Override
 	public void documentChanged(DocumentEvent event) {
-		IWorkbenchPart part = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActivePart();
 		// limpar o array dos marcadores
 		errorReport.cleanErrorList();
-		CSPOutlinePage outlinePage = (CSPOutlinePage) Adapters.adapt(part, IContentOutlinePage.class);// aqui faz o parse 
-		outlinePage.updateContent();
+		
+		updateOutlineView();
 		
 		errorReport.reportError();
+	}
+	
+	public void updateOutlineView() {
+		IWorkbenchPart part = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActivePart();
+		CSPOutlinePage outlinePage = (CSPOutlinePage) Adapters.adapt(part, IContentOutlinePage.class);// aqui faz o parse 
+		outlinePage.updateContent();
 	}
 	
 	public static File getEditorFile() {

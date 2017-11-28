@@ -1,9 +1,6 @@
 package br.ufcg.edu.csp.outline;
 
 import org.antlr.v4.runtime.tree.ParseTree;
-import org.antlr.v4.runtime.tree.TerminalNode;
-
-import br.ufcg.edu.csp.parser.CspParser;
 
 public class ExpressionNodeDecorator {
 
