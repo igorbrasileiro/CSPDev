@@ -6,7 +6,7 @@ import uk.ac.ox.cs.fdr.CompiledEventList;
 import uk.ac.ox.cs.fdr.Counterexample;
 import uk.ac.ox.cs.fdr.CounterexampleList;
 import uk.ac.ox.cs.fdr.DeadlockCounterexample;
-import uk.ac.ox.cs.fdr.PropertyCounterexample;
+import uk.ac.ox.cs.fdr.DeterminismCounterexample;
 import uk.ac.ox.cs.fdr.Session;
 
 public class FDRServiceTest {
@@ -20,10 +20,10 @@ public class FDRServiceTest {
 		session.loadFile("C:\\Users\\sixbd\\runtime-EclipseApplication\\Projeto.Teste.CSP\\arquivo_teste.csp");
 	}
 	
-	public void getTrace() {
+	public void getTraceUpDownDeadlock() {
 		String processName = "UpDown";
 		
-		String assertString = processName+ " " + ":[divergence free [FD]]";
+		String assertString = processName+ " " + ":[deadlock free [FD]]";
 		
 		Assertion deadlockAssert = getAssertion(assertString);
 		
@@ -36,6 +36,32 @@ public class FDRServiceTest {
 			
 			StringBuilder sb = new StringBuilder();
 			sb.append(processName + " Deadlock counterexample trace: ");
+			
+			for(Long event: cel) {
+				sb.append(session.uncompileEvent(event).toString());
+				sb.append("->");
+			}
+			System.out.println(sb.toString());
+		}
+	}
+	
+	public void getTraceUpDownInternalDeterministic() {
+		String processName = "P2";
+		
+		String assertString = processName+ " " + ":[deterministic [FD]]";
+		
+		Assertion deterministicAssert = getAssertion(assertString);
+		
+		CounterexampleList celist = deterministicAssert.counterexamples();
+		
+		for(Counterexample ce : celist) {
+			DeterminismCounterexample dce = ((DeterminismCounterexample) ce);
+			//dce.implementationBehaviour().machine().minimalAcceptances(dce.implementationBehaviour().machine().rootNode());
+			Behaviour counterexampleBehaviour = dce.implementationBehaviour();
+			CompiledEventList cel = counterexampleBehaviour.trace();
+			
+			StringBuilder sb = new StringBuilder();
+			sb.append(processName + " Deterministic counterexample trace: ");
 			
 			for(Long event: cel) {
 				sb.append(session.uncompileEvent(event).toString());
@@ -58,7 +84,9 @@ public class FDRServiceTest {
 	
    public static void main(String[] args) {
 	   FDRServiceTest fdrteste = new FDRServiceTest();
-	   
-	   fdrteste.getTrace();
+	   //TODO Criar Debug Context com contra exemplo;
+	   fdrteste.getTraceUpDownDeadlock();
+	   fdrteste.getTraceUpDownInternalDeterministic();
+	   fdrteste.getTraceUpDownInternalDeterministic();
    }
 }
