@@ -34,45 +34,33 @@ public class CSPMenuCommandHandler extends AbstractHandler {
 
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
-		//IWorkbenchWindow window = HandlerUtil.getActiveWorkbenchWindowChecked(event);
 
-		// pesquisar todos os processos do documento
 		ArrayList<String> processList = getProcessName();
-		loadFile();
 
 		String eventId = event.getCommand().getId();
 
 		final Display display = Display.getCurrent();
 		final Shell shell = new Shell (display, SWT.DIALOG_TRIM); 
-
-		// verificar o tipo do botao - deadlock - divergencia ..
+		FDRChecker checker = createChecker(eventId);
 		
-		FDRChecker checker = null;
-		
-		if(eventId.equals(deadlock)) {
-			checker = new DeadlockChecker();
-		} else if(eventId.equals(deterministic)) {
-			checker = new DeterministicChecker();
-		} else if(eventId.equals(divergence)) {
-			checker = new DivergenceChecker();
-		}
-
 		if(checker != null) {
 			createProcessButtons(checker, shell, processList);
 		}
 		
+		createShell(shell);
+		
+		return null;
+	}
+
+	private void createShell(Shell shell) {
 		shell.layout(true, true);
 		final Point newSize = shell.computeSize(SWT.DEFAULT, SWT.DEFAULT, true);
 		newSize.x += 90;
 		newSize.y += 10;// adicionar a posição a esquerda
 		shell.setSize(newSize);
 		shell.open ();
-	
-		// listar todos os processos e criar botoesx
-
-		return null;
 	}
-
+	
 	private ArrayList<String> getProcessName() {
 		// get root
 		CspParser.SpecContext root = ParserUtil.getRootFromTextEditor();
@@ -108,6 +96,21 @@ public class CSPMenuCommandHandler extends AbstractHandler {
 		}
 	}
 
+	private FDRChecker createChecker(String eventId) {
+		String fileEditorName = getEditorFileName();
+		FDRChecker checker = null;
+		
+		if(eventId.equals(deadlock)) {
+			checker = new DeadlockChecker(fileEditorName);
+		} else if(eventId.equals(deterministic)) {
+			checker = new DeterministicChecker(fileEditorName);
+		} else if(eventId.equals(divergence)) {
+			checker = new DivergenceChecker(fileEditorName);
+		}
+		
+		return checker;
+	}
+	
 	private void createProcessButtons(FDRChecker checker, Shell shell, ArrayList<String> processList) {
 		int startY = 10;
 		if(checker != null) {
@@ -120,7 +123,7 @@ public class CSPMenuCommandHandler extends AbstractHandler {
 				btn.addSelectionListener( new SelectionAdapter() {
 					public void widgetSelected(SelectionEvent se) {
 						//You can set the sixe of the Rectangle
-						MessageDialog.openInformation(shell, "Process Information", checker.checkProcess(fdrService, processName));
+						MessageDialog.openInformation(shell, "Process Information", checker.checkProcess(processName));
 					}
 				});
 
@@ -128,9 +131,8 @@ public class CSPMenuCommandHandler extends AbstractHandler {
 		}
 	}
 	
-	private void loadFile() {
+	private String getEditorFileName() {
 		File editorFile = CSPDocumentProvider.getEditorFile();
-		String fileName = editorFile.getAbsolutePath();
-		fdrService = new FDRServices(fileName);
+		return editorFile.getAbsolutePath();
 	}
 }
