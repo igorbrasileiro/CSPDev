@@ -67,7 +67,7 @@ public class FDRServices {
 		
 	}
 	
-	protected void describeCounterexample(Assertion assertion) {
+	protected void describeCounterexample(Assertion assertion,ArrayList<String> list) {
 		for (Counterexample counterexample : assertion.counterexamples()) {
 			
 			DebugContext debugContext = null;
@@ -79,21 +79,25 @@ public class FDRServices {
 			
 			debugContext.initialise(null);
 			Behaviour root = debugContext.rootBehaviours().get(0);
-			describeBehaviour(debugContext, root, 2, true);
+			describeBehaviour(debugContext, root, list);
 		}
 	}
 	
-	protected void describeBehaviour(DebugContext debugContext,
-			Behaviour behaviour, int indent, boolean recurse) {
-		
-		PrintStream out = System.out;
-
+	private void describeBehaviour(DebugContext debugContext,
+			Behaviour behaviour, ArrayList<String> list) {
+	
 		for (Long event : behaviour.trace()) {
 			// INVALIDEVENT indiciates that this machine did not perform an event at
 			// the specified index (i.e. it was not synchronised with the machines
 			// that actually did perform the event).
-			if (event != fdr.INVALIDEVENT)
-				out.print(session.uncompileEvent(event).toString() + ", ");
+			if (event == fdr.INVALIDEVENT) {
+				list.add("-");
+			} else if(session.uncompileEvent(event).toString().equals("?")) {
+				list.add("?");
+			} else {
+				list.add(session.uncompileEvent(event).toString());
+			}
+				
 		}
 		
 		/*

@@ -123,7 +123,9 @@ public class CSPMenuCommandHandler extends AbstractHandler {
 				btn.addSelectionListener( new SelectionAdapter() {
 					public void widgetSelected(SelectionEvent se) {
 						//You can set the sixe of the Rectangle
-						MessageDialog.openInformation(shell, "Process Information", checker.checkProcess(processName));
+						String msg = checker.checkProcess(processName);
+						MessageDialog.openInformation(shell, "Process Information", msg
+								+ (msg.equals("Failed") ? "Lista contra exeplo: " + checker.getCounterExamples(processName).toString() : "" ));
 					}
 				});
 
