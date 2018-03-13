@@ -6,6 +6,8 @@ import br.ufcg.edu.csp.wordrules.ColorManager;
 
 public class CSPEditor extends TextEditor {
 
+	public static final String PLUGIN_ID = "br.ufcg.edu.csp.editor";
+	
 	private ColorManager colorManager;
 	
 	public CSPEditor() {

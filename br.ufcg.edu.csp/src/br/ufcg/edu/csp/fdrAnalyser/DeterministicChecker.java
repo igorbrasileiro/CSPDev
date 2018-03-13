@@ -14,7 +14,7 @@ public class DeterministicChecker extends FDRServices implements FDRChecker {
 	}
 
 	@Override
-	public String checkProcess(String processName) {
+	public Boolean checkProcess(String processName) {
 		return checkDeterministic(processName);
 	}
 	
@@ -31,14 +31,15 @@ public class DeterministicChecker extends FDRServices implements FDRChecker {
 		return listCounterExample.toArray(new String[1]);
 	}
 	
-	public String checkDeterministic(String processName) {
+	public Boolean checkDeterministic(String processName) {
 		//assert P :[deterministic]
-		String assertString = processName + " " + ":[deterministic [FD]]";
+		String assertString = processName + CHECKER_DECLARATION;
 		
 		Assertion assertion = getAssertion(assertString);
-		String result = null;
+		
+		Boolean result = null;
 		if(assertion != null ) {
-			result = "Deterministic: " + (assertion.passed() ? "Passed" : "Failed" + " add falha");
+			result = assertion.passed();
 		}
 		
 		return result;

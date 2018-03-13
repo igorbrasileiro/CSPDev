@@ -1,12 +1,19 @@
 package br.ufcg.edu.csp.handlers;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
 
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IWorkspace;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -15,8 +22,13 @@ import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.browser.IWebBrowser;
+import org.eclipse.ui.browser.IWorkbenchBrowserSupport;
 
 import br.ufcg.edu.csp.CSPDocumentProvider;
+import br.ufcg.edu.csp.CSPEditor;
+import br.ufcg.edu.csp.fdrAnalyser.CSPGraphServices;
 import br.ufcg.edu.csp.fdrAnalyser.DeadlockChecker;
 import br.ufcg.edu.csp.fdrAnalyser.DeterministicChecker;
 import br.ufcg.edu.csp.fdrAnalyser.DivergenceChecker;
@@ -31,6 +43,7 @@ public class CSPMenuCommandHandler extends AbstractHandler {
 	private static final String deadlock = "br.ufcg.edu.csp.commands.deadlock";
 	private static final String divergence ="br.ufcg.edu.csp.commands.divergence";
 	private FDRServices fdrService;
+	private String projectFilePath;
 
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
@@ -123,9 +136,14 @@ public class CSPMenuCommandHandler extends AbstractHandler {
 				btn.addSelectionListener( new SelectionAdapter() {
 					public void widgetSelected(SelectionEvent se) {
 						//You can set the sixe of the Rectangle
-						String msg = checker.checkProcess(processName);
-						MessageDialog.openInformation(shell, "Process Information", msg
-								+ (msg.equals("Failed") ? "Lista contra exeplo: " + checker.getCounterExamples(processName).toString() : "" ));
+						boolean processPassed = checker.checkProcess(processName);
+						String[] nodes = checker.getCounterExamples(processName);
+						String msg = processPassed ? "passou" : nodes.toString();
+						MessageDialog.openInformation(shell, "Process Information", msg);
+						
+						if(!processPassed) {
+							openCounterexampleBrowser(nodes);
+						}
 					}
 				});
 
@@ -136,5 +154,42 @@ public class CSPMenuCommandHandler extends AbstractHandler {
 	private String getEditorFileName() {
 		File editorFile = CSPDocumentProvider.getEditorFile();
 		return editorFile.getAbsolutePath();
+	}
+	
+	private void openCounterexampleBrowser(String[] nodes) {
+		try{
+			IWorkbenchBrowserSupport support = PlatformUI.getWorkbench().getBrowserSupport();
+			// trocar instancia caso queira um único browser
+			IWebBrowser browser = support.createBrowser(IWorkbenchBrowserSupport.AS_EDITOR, null, "CSP Editor", "Checker counterexample");
+			
+			createCounterExamplesFiles();
+			
+			CSPGraphServices cgs = new CSPGraphServices();
+			//cgs.plotGraph(nodes);
+			
+			File file = new File(projectFilePath+"/Outputs/counterExamplePage.html");
+			
+			URL urlFile = file.toURI().toURL();
+			
+			System.out.println(file);
+			System.out.println(urlFile);
+			
+			browser.openURL(urlFile);
+			
+		} catch (Exception ceb) {
+			ceb.printStackTrace();
+		}
+		
+	}
+	
+	private void createCounterExamplesFiles() throws IOException {
+		projectFilePath = CSPDocumentProvider.getEditorFile().getParentFile().getAbsolutePath();
+
+		File f = new File(projectFilePath+"/Outputs");
+		f.mkdir();
+		
+		//System.out.println(f.getAbsolutePath());
+		//FileWriter fw = new FileWriter(f.getAbsoluteFile()+"/counterExampleGraph.json")
+		
 	}
 }

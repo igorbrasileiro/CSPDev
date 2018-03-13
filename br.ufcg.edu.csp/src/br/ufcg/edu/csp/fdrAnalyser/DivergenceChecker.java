@@ -13,7 +13,7 @@ public class DivergenceChecker extends FDRServices implements FDRChecker {
 	}
 
 	@Override
-	public String checkProcess(String processName) {
+	public Boolean checkProcess(String processName) {
 		return checkDivergenceFree(processName);
 	}
 
@@ -30,15 +30,15 @@ public class DivergenceChecker extends FDRServices implements FDRChecker {
 		return listCounterExample.toArray(new String[1]);
 	}
 	
-	private String checkDivergenceFree(String processName) {
+	private Boolean checkDivergenceFree(String processName) {
 		// :[divergence free [FD]]
 		String assertString = processName + CHECKER_DECLARATION;
 		
-		Assertion divergenceAssert = getAssertion(assertString);
+		Assertion assertion = getAssertion(assertString);
 		
-		String result = null;
-		if(divergenceAssert != null) {
-			result = "Divergence: " + (divergenceAssert.passed() ? "Passed" : "Failed");
+		Boolean result = null;
+		if(assertion != null ) {
+			result = assertion.passed();
 		}
 		
 		return result;
