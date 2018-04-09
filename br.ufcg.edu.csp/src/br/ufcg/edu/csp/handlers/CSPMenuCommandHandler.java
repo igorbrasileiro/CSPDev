@@ -138,12 +138,13 @@ public class CSPMenuCommandHandler extends AbstractHandler {
 						//You can set the sixe of the Rectangle
 						boolean processPassed = checker.checkProcess(processName);
 						String[] nodes = checker.getCounterExamples(processName);
-						String msg = processPassed ? "passou" : nodes.toString();
+						String msg = processPassed ? "passou" : "falhou"; //nodes.toString();
 						MessageDialog.openInformation(shell, "Process Information", msg);
-						
+						/*
 						if(!processPassed) {
 							openCounterexampleBrowser(nodes);
 						}
+						*/
 					}
 				});
 
