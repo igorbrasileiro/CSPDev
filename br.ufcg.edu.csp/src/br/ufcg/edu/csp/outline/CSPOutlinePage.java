@@ -24,23 +24,6 @@ public class CSPOutlinePage extends ContentOutlinePage {
 	}
 
 	public void updateContent(){
-		viewer= getTreeViewer();
-		viewer.setContentProvider(new CSPOutlineContentProvider());
-		viewer.setLabelProvider(new LabelProvider());
-		viewer.addSelectionChangedListener(this);
 		viewer.setInput((((CSPOutlineContentProvider) viewer.getContentProvider()).getRootContext()));
 	}
-
-
-	public void refreshTree() {
-		Display.getDefault().asyncExec(new Runnable() {
-
-
-			public void run() {
-				viewer.refresh();
-			}
-
-		});
-	}
-
 }

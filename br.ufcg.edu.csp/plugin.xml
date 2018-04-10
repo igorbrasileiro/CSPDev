@@ -92,6 +92,16 @@
          </menu>
       </menuContribution>
    </extension>
+   <extension
+         name="AssertsView"
+         point="org.eclipse.ui.views">
+      <view
+            class="br.ufcg.edu.csp.counterexampleView.ProcessCheckerListView"
+            id="br.ufcg.edu.csp.view1"
+            name="Assert List View"
+            restorable="true">
+      </view>
+   </extension>
    
 <!--   
    	<extension point="org.eclipse.ui.commands">

@@ -1,7 +1,11 @@
 package br.ufcg.edu.csp.counterexampleView;
 
+import java.util.ArrayList;
+
 import javax.inject.Inject;
 
+import org.antlr.v4.runtime.ParserRuleContext;
+import org.antlr.v4.runtime.tree.ParseTree;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.IMenuManager;
@@ -27,6 +31,9 @@ import org.eclipse.ui.IWorkbenchActionConstants;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.ViewPart;
 
+import br.ufcg.edu.csp.parser.CspParser;
+import br.ufcg.edu.csp.parser.ParserUtil;
+
 
 public class ProcessCheckerListView extends ViewPart {
 @Inject IWorkbench workbench;
@@ -35,7 +42,7 @@ public class ProcessCheckerListView extends ViewPart {
 	private Action action1;
 	private Action action2;
 	private Action doubleClickAction;
-	private String[] allProcesses = {};
+	private String[] allViewContent;
 	 
 
 	class ViewLabelProvider extends LabelProvider implements ITableLabelProvider {
@@ -49,27 +56,61 @@ public class ProcessCheckerListView extends ViewPart {
 		}
 		@Override
 		public Image getImage(Object obj) {
-			return workbench.getSharedImages().getImage(ISharedImages.IMG_OBJ_ELEMENT);
+			return PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJ_ELEMENT);
 		}
 	}
 
 	@Override
 	public void createPartControl(Composite parent) {
 		viewer = new TableViewer(parent, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL);
-		
+				
 		viewer.setContentProvider(ArrayContentProvider.getInstance());
-		viewer.setInput(allProcesses);
-	viewer.setLabelProvider(new ViewLabelProvider());
+		viewer.setInput(allViewContent);
+		updateContent();
+	    viewer.setLabelProvider(new ViewLabelProvider());
 
 		// Create the help context id for the viewer's control
-		workbench.getHelpSystem().setHelp(viewer.getControl(), "br.ufcg.edu.csp.graphviz.viewer");
+		//workbench.getHelpSystem().setHelp(viewer.getControl(), "br.ufcg.edu.csp.graphviz.viewer");
 		getSite().setSelectionProvider(viewer);
 		makeActions();
 		hookContextMenu();
 		hookDoubleClickAction();
-		contributeToActionBars();
+		//contributeToActionBars(); criar os botões
 	}
 
+	public void updateContent() {
+		if(this.allViewContent == null) {
+			this.allViewContent = new String[1];
+		}
+		ParserRuleContext tree = ParserUtil.getRootFromTextEditor();
+		ArrayList<String> listContent = new ArrayList();
+		
+		addProcessToList(tree, listContent);
+		//addAsserrtsToList
+		//precisar do node decorator, por que contem o nó, pois precisará diferencia-los na outra view
+		// add assert rule a definition na gramatica
+		
+		this.allViewContent = listContent.toArray(this.allViewContent);
+		
+		viewer.setInput(this.allViewContent);
+	}
+	
+	private void addProcessToList(ParseTree node, ArrayList<String> list) {
+		if(node instanceof CspParser.SpecContext) {
+			int children = ((ParseTree) node).getChildCount();
+			for (int i = 0; i < children; i++) {
+				ParseTree newNode = ((ParseTree) node).getChild(i);
+				addProcessToList(newNode, list);
+			}
+		} else if(node instanceof CspParser.DefinitionContext) {
+			// regra de filho unico
+			ParseTree newNode = ((ParseTree) node).getChild(0);
+			addProcessToList(newNode, list);
+		} else if(node instanceof CspParser.SimpleDefinitionContext) {
+			list.add(node.getText());
+		}
+	}
+	
 	private void hookContextMenu() {
 		MenuManager menuMgr = new MenuManager("#PopupMenu");
 		menuMgr.setRemoveAllWhenShown(true);
@@ -125,7 +166,7 @@ public class ProcessCheckerListView extends ViewPart {
 		};
 		action2.setText("Action 2");
 		action2.setToolTipText("Action 2 tooltip");
-		action2.setImageDescriptor(workbench.getSharedImages().
+		action2.setImageDescriptor(PlatformUI.getWorkbench().getSharedImages().
 				getImageDescriptor(ISharedImages.IMG_OBJS_INFO_TSK));
 		doubleClickAction = new Action() {
 			public void run() {
@@ -153,15 +194,5 @@ public class ProcessCheckerListView extends ViewPart {
 	@Override
 	public void setFocus() {
 		viewer.getControl().setFocus();
-	}
-	
-	public void updateContent(String content) {
-		String[] processes = this.allProcesses;
-		String[] updatedProcesses = new String[processes.length + 1];
-		int lastIndex = updatedProcesses.length + 1;
-		for (int i = 0; i < processes.length; i++) {
-			updatedProcesses[i] = processes[i];
-		}
-		updatedProcesses[lastIndex] = content;
 	}
 }
