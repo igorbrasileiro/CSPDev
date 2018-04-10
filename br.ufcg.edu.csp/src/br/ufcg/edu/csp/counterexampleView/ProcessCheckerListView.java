@@ -38,7 +38,6 @@ import br.ufcg.edu.csp.fdrAnalyser.DeadlockChecker;
 import br.ufcg.edu.csp.fdrAnalyser.DeterministicChecker;
 import br.ufcg.edu.csp.fdrAnalyser.DivergenceChecker;
 import br.ufcg.edu.csp.fdrAnalyser.FDRChecker;
-import br.ufcg.edu.csp.outline.ExpressionNodeDecorator;
 import br.ufcg.edu.csp.parser.CspParser;
 import br.ufcg.edu.csp.parser.ParserUtil;
 
@@ -51,7 +50,7 @@ public class ProcessCheckerListView extends ViewPart {
 	private Action determinismChecker;
 	private Action deadlockChecker;
 	private Action doubleClickAction;
-	private ExpressionNodeDecorator[] allViewContent;
+	private CheckerNodeDecorator[] allViewContent;
 	 
 
 	class ViewLabelProvider extends LabelProvider implements ITableLabelProvider {
@@ -89,10 +88,10 @@ public class ProcessCheckerListView extends ViewPart {
 
 	public void updateContent() {
 		if(this.allViewContent == null) {
-			this.allViewContent = new ExpressionNodeDecorator[1];
+			this.allViewContent = new CheckerNodeDecorator[1];
 		}
 		ParserRuleContext tree = ParserUtil.getRootFromTextEditor();
-		ArrayList<ExpressionNodeDecorator> listContent = new ArrayList<>();
+		ArrayList<CheckerNodeDecorator> listContent = new ArrayList<>();
 		
 		addProcessToList(tree, listContent);
 		//addAsserrtsToList
@@ -103,7 +102,7 @@ public class ProcessCheckerListView extends ViewPart {
 		viewer.setInput(this.allViewContent);
 	}
 	
-	private void addProcessToList(ParseTree node, ArrayList<ExpressionNodeDecorator> list) {
+	private void addProcessToList(ParseTree node, ArrayList<CheckerNodeDecorator> list) {
 		if(node instanceof CspParser.SpecContext) {
 			int children = ((ParseTree) node).getChildCount();
 			for (int i = 0; i < children; i++) {
@@ -115,7 +114,7 @@ public class ProcessCheckerListView extends ViewPart {
 			ParseTree newNode = ((ParseTree) node).getChild(0);
 			addProcessToList(newNode, list);
 		} else if(node instanceof CspParser.SimpleDefinitionContext) {
-			list.add(new ExpressionNodeDecorator(node));
+			list.add(new CheckerNodeDecorator(node));
 		}
 	}
 	
@@ -150,7 +149,6 @@ public class ProcessCheckerListView extends ViewPart {
 
 	private void makeActions() {
 		String cspFileName = getEditorFileName();
-		FDRChecker checker;
 		
 		determinismChecker = new Action() {
 			public void run() {
@@ -187,15 +185,7 @@ public class ProcessCheckerListView extends ViewPart {
 		
 		divergenceChecker.setText("Check Divergence");
 		divergenceChecker.setImageDescriptor(getImageDescriptor());
-		
-		/*doubleClickAction = new Action() {
-			public void run() {
-				IStructuredSelection selection = viewer.getStructuredSelection();
-				Object obj = selection.getFirstElement();
-				showMessage("Double-click detected on "+obj.toString());
-			}
-		};
-		*/
+
 	}
 
 	@Override

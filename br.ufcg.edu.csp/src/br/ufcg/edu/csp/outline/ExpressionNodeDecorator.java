@@ -7,7 +7,6 @@ public class ExpressionNodeDecorator {
 	private ParseTree node;
 
 	public ExpressionNodeDecorator(ParseTree node) {
-		super();
 		this.node = node;
 	}
 
@@ -27,12 +26,8 @@ public class ExpressionNodeDecorator {
 		return null;
 	}
 	
-	// TODO: FAZER METODO TOSTRING
 	@Override
 	public String toString() {
-		StringBuilder retorno = new StringBuilder();
-		
-		retorno.append(node.getText());
-		return retorno.toString();
+		return node.getText();
 	}
 }
