@@ -1,5 +1,6 @@
 package br.ufcg.edu.csp.counterexampleView;
 
+import java.io.File;
 import java.util.ArrayList;
 
 import javax.inject.Inject;
@@ -13,6 +14,7 @@ import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;
@@ -31,6 +33,12 @@ import org.eclipse.ui.IWorkbenchActionConstants;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.ViewPart;
 
+import br.ufcg.edu.csp.CSPDocumentProvider;
+import br.ufcg.edu.csp.fdrAnalyser.DeadlockChecker;
+import br.ufcg.edu.csp.fdrAnalyser.DeterministicChecker;
+import br.ufcg.edu.csp.fdrAnalyser.DivergenceChecker;
+import br.ufcg.edu.csp.fdrAnalyser.FDRChecker;
+import br.ufcg.edu.csp.outline.ExpressionNodeDecorator;
 import br.ufcg.edu.csp.parser.CspParser;
 import br.ufcg.edu.csp.parser.ParserUtil;
 
@@ -39,10 +47,11 @@ public class ProcessCheckerListView extends ViewPart {
 @Inject IWorkbench workbench;
 	
 	private TableViewer viewer;
-	private Action action1;
-	private Action action2;
+	private Action divergenceChecker;
+	private Action determinismChecker;
+	private Action deadlockChecker;
 	private Action doubleClickAction;
-	private String[] allViewContent;
+	private ExpressionNodeDecorator[] allViewContent;
 	 
 
 	class ViewLabelProvider extends LabelProvider implements ITableLabelProvider {
@@ -68,26 +77,25 @@ public class ProcessCheckerListView extends ViewPart {
 		viewer.setInput(allViewContent);
 		updateContent();
 	    viewer.setLabelProvider(new ViewLabelProvider());
-
+	    
 		// Create the help context id for the viewer's control
 		//workbench.getHelpSystem().setHelp(viewer.getControl(), "br.ufcg.edu.csp.graphviz.viewer");
 		getSite().setSelectionProvider(viewer);
 		makeActions();
 		hookContextMenu();
-		hookDoubleClickAction();
+		//hookDoubleClickAction();
 		//contributeToActionBars(); criar os botões
 	}
 
 	public void updateContent() {
 		if(this.allViewContent == null) {
-			this.allViewContent = new String[1];
+			this.allViewContent = new ExpressionNodeDecorator[1];
 		}
 		ParserRuleContext tree = ParserUtil.getRootFromTextEditor();
-		ArrayList<String> listContent = new ArrayList();
+		ArrayList<ExpressionNodeDecorator> listContent = new ArrayList<>();
 		
 		addProcessToList(tree, listContent);
 		//addAsserrtsToList
-		//precisar do node decorator, por que contem o nó, pois precisará diferencia-los na outra view
 		// add assert rule a definition na gramatica
 		
 		this.allViewContent = listContent.toArray(this.allViewContent);
@@ -95,7 +103,7 @@ public class ProcessCheckerListView extends ViewPart {
 		viewer.setInput(this.allViewContent);
 	}
 	
-	private void addProcessToList(ParseTree node, ArrayList<String> list) {
+	private void addProcessToList(ParseTree node, ArrayList<ExpressionNodeDecorator> list) {
 		if(node instanceof CspParser.SpecContext) {
 			int children = ((ParseTree) node).getChildCount();
 			for (int i = 0; i < children; i++) {
@@ -107,7 +115,7 @@ public class ProcessCheckerListView extends ViewPart {
 			ParseTree newNode = ((ParseTree) node).getChild(0);
 			addProcessToList(newNode, list);
 		} else if(node instanceof CspParser.SimpleDefinitionContext) {
-			list.add(node.getText());
+			list.add(new ExpressionNodeDecorator(node));
 		}
 	}
 	
@@ -124,66 +132,89 @@ public class ProcessCheckerListView extends ViewPart {
 		getSite().registerContextMenu(menuMgr, viewer);
 	}
 
-	private void contributeToActionBars() {
-		IActionBars bars = getViewSite().getActionBars();
-		fillLocalPullDown(bars.getMenuManager());
-		fillLocalToolBar(bars.getToolBarManager());
-	}
-
 	private void fillLocalPullDown(IMenuManager manager) {
-		manager.add(action1);
+		manager.add(determinismChecker);
 		manager.add(new Separator());
-		manager.add(action2);
+		manager.add(deadlockChecker);
+		manager.add(new Separator());
+		manager.add(divergenceChecker);
 	}
 
 	private void fillContextMenu(IMenuManager manager) {
-		manager.add(action1);
-		manager.add(action2);
+		manager.add(determinismChecker);
+		manager.add(deadlockChecker);
+		manager.add(divergenceChecker);
 		
 		manager.add(new Separator(IWorkbenchActionConstants.MB_ADDITIONS));
 	}
-	
-	private void fillLocalToolBar(IToolBarManager manager) {
-		manager.add(action1);
-		manager.add(action2);
-	}
 
 	private void makeActions() {
-		action1 = new Action() {
-			public void run() {
-				showMessage("Action 1 executed");
-			}
-		};
-		action1.setText("Action 1");
-		action1.setToolTipText("Action 1 tooltip");
-		action1.setImageDescriptor(PlatformUI.getWorkbench().getSharedImages().
-			getImageDescriptor(ISharedImages.IMG_OBJS_INFO_TSK));
+		String cspFileName = getEditorFileName();
+		FDRChecker checker;
 		
-		action2 = new Action() {
+		determinismChecker = new Action() {
 			public void run() {
-				showMessage("Action 2 executed");
+				FDRChecker checker = new DeterministicChecker(cspFileName);
+				IStructuredSelection selection = viewer.getStructuredSelection();
+				Object obj = selection.getFirstElement();
+				showMessage("Teste Determinism "+obj.toString());
 			}
 		};
-		action2.setText("Action 2");
-		action2.setToolTipText("Action 2 tooltip");
-		action2.setImageDescriptor(PlatformUI.getWorkbench().getSharedImages().
-				getImageDescriptor(ISharedImages.IMG_OBJS_INFO_TSK));
-		doubleClickAction = new Action() {
+		
+		determinismChecker.setText("Check Determinism");
+		determinismChecker.setImageDescriptor(getImageDescriptor());
+		
+		deadlockChecker = new Action() {
+			public void run() {
+				FDRChecker checker = new DeadlockChecker(cspFileName);
+				IStructuredSelection selection = viewer.getStructuredSelection();
+				Object obj = selection.getFirstElement();
+				showMessage("Teste deadlock "+obj.toString());
+			}
+		};
+		
+		deadlockChecker.setText("Check Deadlock");
+		deadlockChecker.setImageDescriptor(getImageDescriptor());
+		
+		divergenceChecker = new Action() {
+			public void run() {
+				FDRChecker checker = new DivergenceChecker(cspFileName);
+				IStructuredSelection selection = viewer.getStructuredSelection();
+				Object obj = selection.getFirstElement();
+				showMessage("Teste divergence "+obj.toString());
+			}
+		};
+		
+		divergenceChecker.setText("Check Divergence");
+		divergenceChecker.setImageDescriptor(getImageDescriptor());
+		
+		/*doubleClickAction = new Action() {
 			public void run() {
 				IStructuredSelection selection = viewer.getStructuredSelection();
 				Object obj = selection.getFirstElement();
 				showMessage("Double-click detected on "+obj.toString());
 			}
 		};
+		*/
 	}
 
-	private void hookDoubleClickAction() {
-		viewer.addDoubleClickListener(new IDoubleClickListener() {
-			public void doubleClick(DoubleClickEvent event) {
-				doubleClickAction.run();
-			}
-		});
+	@Override
+	public void setFocus() {
+		viewer.getControl().setFocus();
 	}
+	
+	private String getEditorFileName() {
+		File editorFile = CSPDocumentProvider.getEditorFile();
+		return editorFile.getAbsolutePath();
+	}
+	
+	private ImageDescriptor getImageDescriptor() {
+		return PlatformUI.getWorkbench().getSharedImages().
+		getImageDescriptor(ISharedImages.IMG_OBJS_INFO_TSK);
+	}
+	
+	// dead
+
 	private void showMessage(String message) {
 		MessageDialog.openInformation(
 			viewer.getControl().getShell(),
@@ -191,8 +222,22 @@ public class ProcessCheckerListView extends ViewPart {
 			message);
 	}
 
-	@Override
-	public void setFocus() {
-		viewer.getControl().setFocus();
+	private void contributeToActionBars() {
+		IActionBars bars = getViewSite().getActionBars();
+		fillLocalPullDown(bars.getMenuManager());
+		fillLocalToolBar(bars.getToolBarManager());
+	}
+	
+	private void fillLocalToolBar(IToolBarManager manager) {
+		manager.add(determinismChecker);
+		manager.add(deadlockChecker);
+	}
+	
+	private void hookDoubleClickAction() {
+		viewer.addDoubleClickListener(new IDoubleClickListener() {
+			public void doubleClick(DoubleClickEvent event) {
+				doubleClickAction.run();
+			}
+		});
 	}
 }
