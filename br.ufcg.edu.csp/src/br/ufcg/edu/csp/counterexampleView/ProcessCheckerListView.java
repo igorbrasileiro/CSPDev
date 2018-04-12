@@ -153,9 +153,7 @@ public class ProcessCheckerListView extends ViewPart {
 		determinismChecker = new Action() {
 			public void run() {
 				FDRChecker checker = new DeterministicChecker(cspFileName);
-				IStructuredSelection selection = viewer.getStructuredSelection();
-				Object obj = selection.getFirstElement();
-				showMessage("Teste Determinism "+obj.toString());
+				checkNode(checker);
 			}
 		};
 		
@@ -165,9 +163,7 @@ public class ProcessCheckerListView extends ViewPart {
 		deadlockChecker = new Action() {
 			public void run() {
 				FDRChecker checker = new DeadlockChecker(cspFileName);
-				IStructuredSelection selection = viewer.getStructuredSelection();
-				Object obj = selection.getFirstElement();
-				showMessage("Teste deadlock "+obj.toString());
+				checkNode(checker);
 			}
 		};
 		
@@ -177,9 +173,7 @@ public class ProcessCheckerListView extends ViewPart {
 		divergenceChecker = new Action() {
 			public void run() {
 				FDRChecker checker = new DivergenceChecker(cspFileName);
-				IStructuredSelection selection = viewer.getStructuredSelection();
-				Object obj = selection.getFirstElement();
-				showMessage("Teste divergence "+obj.toString());
+				checkNode(checker);
 			}
 		};
 		
@@ -188,6 +182,12 @@ public class ProcessCheckerListView extends ViewPart {
 
 	}
 
+	private void checkNode(FDRChecker checker) {
+		IStructuredSelection selection = viewer.getStructuredSelection();
+		Object obj = selection.getFirstElement();
+		checker.checkProcess(obj.toString()); // capturar um boolean
+	}
+	
 	@Override
 	public void setFocus() {
 		viewer.getControl().setFocus();
