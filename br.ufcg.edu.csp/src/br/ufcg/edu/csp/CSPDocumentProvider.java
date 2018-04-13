@@ -22,10 +22,13 @@ import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.editors.text.FileDocumentProvider;
+import org.eclipse.ui.part.ViewPart;
 import org.eclipse.ui.texteditor.AbstractTextEditor;
 import org.eclipse.ui.texteditor.IDocumentProvider;
+import org.eclipse.ui.texteditor.ITextEditor;
 import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
 
+import br.ufcg.edu.csp.counterexampleView.ProcessCheckerListView;
 import br.ufcg.edu.csp.errorReport.ReportErrorMarker;
 import br.ufcg.edu.csp.outline.CSPOutlinePage;
 
@@ -33,7 +36,8 @@ import br.ufcg.edu.csp.outline.CSPOutlinePage;
 public class CSPDocumentProvider extends FileDocumentProvider implements IDocumentListener {
 
 	private ReportErrorMarker errorReport;
-
+	private static IDocument document;
+	
 	public CSPDocumentProvider() {
 		errorReport = ReportErrorMarker.getInstance();
 	}
@@ -47,9 +51,10 @@ public class CSPDocumentProvider extends FileDocumentProvider implements IDocume
 			partitioner.connect(document);
 			document.setDocumentPartitioner(partitioner);
 			document.addDocumentListener(this);
+			this.document = document;
 		}
 		
-		return document;
+		return this.document;
 	}
 	
 	@Override
@@ -71,6 +76,10 @@ public class CSPDocumentProvider extends FileDocumentProvider implements IDocume
 		IWorkbenchPart part = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActivePart();
 		CSPOutlinePage outlinePage = (CSPOutlinePage) Adapters.adapt(part, IContentOutlinePage.class);// aqui faz o parse 
 		outlinePage.updateContent();
+	}
+	
+	public static IDocument getDocument() {
+		return document;
 	}
 	
 	public static File getEditorFile() {

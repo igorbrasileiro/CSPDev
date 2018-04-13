@@ -2,7 +2,9 @@ package br.ufcg.edu.csp.outline;
 
 import org.antlr.v4.runtime.tree.ParseTree;
 
-public class ExpressionNodeDecorator {
+import br.ufcg.edu.csp.utils.INodeDecorator;
+
+public class ExpressionNodeDecorator implements INodeDecorator{
 
 	private ParseTree node;
 

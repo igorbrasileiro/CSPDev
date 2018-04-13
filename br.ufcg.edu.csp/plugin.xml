@@ -18,6 +18,9 @@
             adaptableType="br.ufcg.edu.csp.CSPEditor"
             class="br.ufcg.edu.csp.outline.CSPEditorToOutlineAdapterFactory">
          <adapter type="org.eclipse.ui.views.contentoutline.IContentOutlinePage"/>
+         <adapter
+               type="br.ufcg.edu.csp.counterexampleView.ProcessCheckerListView">
+         </adapter>
       </factory>
    </extension>
 

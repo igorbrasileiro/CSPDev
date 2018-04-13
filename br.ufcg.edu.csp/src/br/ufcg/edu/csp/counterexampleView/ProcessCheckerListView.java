@@ -1,12 +1,9 @@
 package br.ufcg.edu.csp.counterexampleView;
 
 import java.io.File;
-import java.util.ArrayList;
 
 import javax.inject.Inject;
 
-import org.antlr.v4.runtime.ParserRuleContext;
-import org.antlr.v4.runtime.tree.ParseTree;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.IMenuManager;
@@ -15,7 +12,9 @@ import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.resource.ImageDescriptor;
-import org.eclipse.jface.viewers.ArrayContentProvider;
+import org.eclipse.jface.text.DocumentEvent;
+import org.eclipse.jface.text.IDocument;
+import org.eclipse.jface.text.IDocumentListener;
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -38,11 +37,11 @@ import br.ufcg.edu.csp.fdrAnalyser.DeadlockChecker;
 import br.ufcg.edu.csp.fdrAnalyser.DeterministicChecker;
 import br.ufcg.edu.csp.fdrAnalyser.DivergenceChecker;
 import br.ufcg.edu.csp.fdrAnalyser.FDRChecker;
-import br.ufcg.edu.csp.parser.CspParser;
-import br.ufcg.edu.csp.parser.ParserUtil;
+import br.ufcg.edu.csp.utils.CSPViewsContentProvider;
+import br.ufcg.edu.csp.utils.CheckerNodeFactory;
 
 
-public class ProcessCheckerListView extends ViewPart {
+public class ProcessCheckerListView extends ViewPart implements IDocumentListener {
 @Inject IWorkbench workbench;
 	
 	private TableViewer viewer;
@@ -50,9 +49,7 @@ public class ProcessCheckerListView extends ViewPart {
 	private Action determinismChecker;
 	private Action deadlockChecker;
 	private Action doubleClickAction;
-	private CheckerNodeDecorator[] allViewContent;
-	 
-
+	
 	class ViewLabelProvider extends LabelProvider implements ITableLabelProvider {
 		@Override
 		public String getColumnText(Object obj, int index) {
@@ -70,12 +67,13 @@ public class ProcessCheckerListView extends ViewPart {
 
 	@Override
 	public void createPartControl(Composite parent) {
+		addDocumentListner();
+		
 		viewer = new TableViewer(parent, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL);
 				
-		viewer.setContentProvider(ArrayContentProvider.getInstance());
-		viewer.setInput(allViewContent);
-		updateContent();
-	    viewer.setLabelProvider(new ViewLabelProvider());
+		viewer.setContentProvider(new CSPViewsContentProvider<CheckerNodeDecorator>(new CheckerNodeFactory()));
+		viewer.setLabelProvider(new ViewLabelProvider());
+		viewer.setInput((((CSPViewsContentProvider<CheckerNodeDecorator>) viewer.getContentProvider()).getTree()));	   
 	    
 		// Create the help context id for the viewer's control
 		//workbench.getHelpSystem().setHelp(viewer.getControl(), "br.ufcg.edu.csp.graphviz.viewer");
@@ -86,36 +84,18 @@ public class ProcessCheckerListView extends ViewPart {
 		//contributeToActionBars(); criar os botões
 	}
 
-	public void updateContent() {
-		if(this.allViewContent == null) {
-			this.allViewContent = new CheckerNodeDecorator[1];
+	private void addDocumentListner() {
+		IDocument document = CSPDocumentProvider.getDocument();
+		if(document != null) {
+			document.addDocumentListener(this);
 		}
-		ParserRuleContext tree = ParserUtil.getRootFromTextEditor();
-		ArrayList<CheckerNodeDecorator> listContent = new ArrayList<>();
-		
-		addProcessToList(tree, listContent);
-		//addAsserrtsToList
-		// add assert rule a definition na gramatica
-		
-		this.allViewContent = listContent.toArray(this.allViewContent);
-		
-		viewer.setInput(this.allViewContent);
 	}
-	
-	private void addProcessToList(ParseTree node, ArrayList<CheckerNodeDecorator> list) {
-		if(node instanceof CspParser.SpecContext) {
-			int children = ((ParseTree) node).getChildCount();
-			for (int i = 0; i < children; i++) {
-				ParseTree newNode = ((ParseTree) node).getChild(i);
-				addProcessToList(newNode, list);
-			}
-		} else if(node instanceof CspParser.DefinitionContext) {
-			// regra de filho unico
-			ParseTree newNode = ((ParseTree) node).getChild(0);
-			addProcessToList(newNode, list);
-		} else if(node instanceof CspParser.SimpleDefinitionContext) {
-			list.add(new CheckerNodeDecorator(node));
-		}
+
+	public void updateContent() {
+		//viewer.setContentProvider(new CSPOutlineContentProvider());
+		//viewer.setLabelProvider(new ViewLabelProvider());
+		viewer.setInput((((CSPViewsContentProvider<CheckerNodeDecorator>) viewer.getContentProvider()).getTree()));
+		//getSite().setSelectionProvider(viewer);
 	}
 	
 	private void hookContextMenu() {
@@ -185,9 +165,26 @@ public class ProcessCheckerListView extends ViewPart {
 	private void checkNode(FDRChecker checker) {
 		IStructuredSelection selection = viewer.getStructuredSelection();
 		Object obj = selection.getFirstElement();
-		checker.checkProcess(obj.toString()); // capturar um boolean
+		if(obj instanceof CheckerNodeDecorator) {
+			// TODO: fazer verifica~ção se nó tinha condicao falsa e agora é true e remover ele da lista
+			boolean checkCondition = checker.checkProcess(obj.toString()); // capturar um boolean
+			((CheckerNodeDecorator) obj).setCheckCondition(checkCondition);
+			if(!checkCondition) {
+				updateCheckerNodeList(checker,(CheckerNodeDecorator) obj);
+			}
+		}
 	}
 	
+	private void updateCheckerNodeList(FDRChecker checker, CheckerNodeDecorator node) {
+		CheckerNodeListSingleton checkerNodeList = CheckerNodeListSingleton.getInstance();
+		
+		String[] nodeCounterexamples = checker.getCounterExamples(node.toString());	
+		
+		node.setCounterexamples(nodeCounterexamples);
+		
+		checkerNodeList.updateList(node);
+	}
+
 	@Override
 	public void setFocus() {
 		viewer.getControl().setFocus();
@@ -202,32 +199,15 @@ public class ProcessCheckerListView extends ViewPart {
 		return PlatformUI.getWorkbench().getSharedImages().
 		getImageDescriptor(ISharedImages.IMG_OBJS_INFO_TSK);
 	}
-	
-	// dead
 
-	private void showMessage(String message) {
-		MessageDialog.openInformation(
-			viewer.getControl().getShell(),
-			"Sample View",
-			message);
+	@Override
+	public void documentAboutToBeChanged(DocumentEvent event) {
+		
 	}
 
-	private void contributeToActionBars() {
-		IActionBars bars = getViewSite().getActionBars();
-		fillLocalPullDown(bars.getMenuManager());
-		fillLocalToolBar(bars.getToolBarManager());
+	@Override
+	public void documentChanged(DocumentEvent event) {
+		updateContent();
 	}
 	
-	private void fillLocalToolBar(IToolBarManager manager) {
-		manager.add(determinismChecker);
-		manager.add(deadlockChecker);
-	}
-	
-	private void hookDoubleClickAction() {
-		viewer.addDoubleClickListener(new IDoubleClickListener() {
-			public void doubleClick(DoubleClickEvent event) {
-				doubleClickAction.run();
-			}
-		});
-	}
 }

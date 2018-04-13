@@ -1,4 +1,4 @@
-package br.ufcg.edu.csp.outline;
+package br.ufcg.edu.csp.utils;
 
 import java.util.ArrayList;
 
@@ -7,29 +7,16 @@ import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.TerminalNode;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 
+import br.ufcg.edu.csp.counterexampleView.CheckerNodeDecorator;
 import br.ufcg.edu.csp.parser.CspParser;
 import br.ufcg.edu.csp.parser.ParserUtil;
 
+public class CSPViewsContentProvider<T> implements ITreeContentProvider{
+	private INodeFactory factory;
 
-public class CSPOutlineContentProvider implements ITreeContentProvider {
-
-	private ParserRuleContext rootContext;
-
-	public CSPOutlineContentProvider() {
-		this.rootContext = getTree();
+	public CSPViewsContentProvider(INodeFactory factory) {
+		this.factory = factory;
 	}
-
-
-	public ParserRuleContext getRootContext() {
-		return rootContext;
-	}
-
-
-	public void setRootContext(ParserRuleContext rootContext) {
-		this.rootContext = rootContext;
-	}
-
-
 
 	public ParserRuleContext getTree() {
 		return ParserUtil.getRootFromTextEditor(); // nao pode retornar null, impede de criar a tree;
@@ -47,17 +34,17 @@ public class CSPOutlineContentProvider implements ITreeContentProvider {
 
 	@Override
 	public Object getParent(Object obj) {
-		return ((ExpressionNodeDecorator)obj).getParent();
+		return ((INodeDecorator)obj).getNode().getParent();
 	}
 
 	@Override
 	public Object[] getElements(Object obj) {
 		// TODO: regra do parser simpleDefinition
-		ArrayList<ExpressionNodeDecorator> elementos = new ArrayList<>();
+		ArrayList<T> elementos = new ArrayList<>();
 		if(obj instanceof CspParser.SpecContext){
 			getElements(obj, elementos);
-		} else if (obj instanceof ExpressionNodeDecorator){
-			return getElements(((ExpressionNodeDecorator) obj).getNode());
+		} else if (obj instanceof INodeDecorator){
+			return getElements(((INodeDecorator) obj).getNode());
 		}
 		
 		return elementos.toArray();
@@ -68,7 +55,7 @@ public class CSPOutlineContentProvider implements ITreeContentProvider {
 	 * @param obj
 	 * @param list
 	 */
-	private void getElements(Object obj, ArrayList<ExpressionNodeDecorator> list) {
+	private void getElements(Object obj, ArrayList<T> list) {
 		if(obj instanceof CspParser.SpecContext){
 			// regra de muitos filhos
 			int children = ((ParseTree) obj).getChildCount();
@@ -85,25 +72,26 @@ public class CSPOutlineContentProvider implements ITreeContentProvider {
 			
 			// regra terminal para imprimir os processos
 			// debug String text = ((ParseTree) obj).getText();
-			list.add(new ExpressionNodeDecorator((ParseTree) obj));
+			INodeDecorator nodeDecorator = factory.createInstance();
+			nodeDecorator.setNode((ParseTree) obj);
+			list.add((T) nodeDecorator);
 		}
 	}
 	
 	@Override
 	public Object[] getChildren(Object obj) {
-		ArrayList<ExpressionNodeDecorator> elementos = new ArrayList<>();
+		ArrayList<INodeDecorator> elementos = new ArrayList<>();
 		if(obj instanceof CspParser.SpecContext){
 			int children = ((ParseTree) obj).getChildCount();
 			for (int i = 0; i < children; i++) {
 				ParseTree node = ((ParseTree) obj).getChild(i);
 				if(!(node instanceof TerminalNode)){
-					elementos.add( new ExpressionNodeDecorator(node));
+					elementos.add( new CheckerNodeDecorator(node));
 				}
 			}
-		} else if (obj instanceof ExpressionNodeDecorator){
-			return getChildren(((ExpressionNodeDecorator) obj).getNode());
+		} else if (obj instanceof CheckerNodeDecorator){
+			return getChildren(((INodeDecorator) obj).getNode());
 		}
 		return elementos.toArray();
 	}
-
 }
