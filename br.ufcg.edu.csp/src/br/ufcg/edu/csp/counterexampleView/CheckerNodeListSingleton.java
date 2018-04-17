@@ -21,10 +21,17 @@ public class CheckerNodeListSingleton {
 	
 	public void updateList(CheckerNodeDecorator node) {
 		list.add(node);
-		refreshCounterexampleListView();
+		/* CODIGO UTIL
+		 * for(IWorkbenchWindow workbench : PlatformUI.getWorkbench().getWorkbenchWindows()) {
+				for(IWorkbenchPage workbenchPage : workbench.getPages()) {
+					workbenchPage.findView(); //nome da viewpart
+				}
+			}
+		 */
+		updateListners();
 	}
 	
-	private void refreshCounterexampleListView() {
-		//TODO: atualizar através de factory
+	private void updateListners() {
+		//TODO: atualizar observers
 	}
  }

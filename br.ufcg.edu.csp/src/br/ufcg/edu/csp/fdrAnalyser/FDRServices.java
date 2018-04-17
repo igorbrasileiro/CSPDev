@@ -54,7 +54,6 @@ public class FDRServices {
 	*/
 	
 	// necessários deadlock, livelock e deterministic 
-	//TODO:  livelock
 	
 	protected Assertion getAssertion(String assertion) {
 		try {

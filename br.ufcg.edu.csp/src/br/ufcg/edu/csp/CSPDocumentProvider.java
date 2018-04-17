@@ -16,6 +16,7 @@ import org.eclipse.jface.text.IDocumentPartitioner;
 import org.eclipse.jface.text.rules.FastPartitioner;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPart;
@@ -40,6 +41,7 @@ public class CSPDocumentProvider extends FileDocumentProvider implements IDocume
 	
 	public CSPDocumentProvider() {
 		errorReport = ReportErrorMarker.getInstance();
+		//TODO: remover isto aqui adicionar IDocumentListner a errorReport
 	}
 	
 	@Override
@@ -68,14 +70,24 @@ public class CSPDocumentProvider extends FileDocumentProvider implements IDocume
 		errorReport.cleanErrorList();
 		
 		updateOutlineView();
+		updateProcessCheckerListView();
 		
 		errorReport.reportError();
+		
 	}
 	
+	private void updateProcessCheckerListView() {
+		ProcessCheckerListView pclv = (ProcessCheckerListView) PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().findView("br.ufcg.edu.csp.processcheckerview");
+		if(pclv != null) {
+			pclv.updateContent();
+		}
+	}
+
 	public void updateOutlineView() {
 		IWorkbenchPart part = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActivePart();
 		CSPOutlinePage outlinePage = (CSPOutlinePage) Adapters.adapt(part, IContentOutlinePage.class);// aqui faz o parse 
-		outlinePage.updateContent();
+		if(outlinePage != null)
+			outlinePage.updateContent();
 	}
 	
 	public static IDocument getDocument() {

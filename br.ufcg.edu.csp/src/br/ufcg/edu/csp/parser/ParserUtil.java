@@ -67,7 +67,9 @@ public class ParserUtil {
 	}
 
 	public static CspParser.SpecContext getRootFromTextEditor() {
-		CspParser parser = (CspParser) ParserUtil.getParserFromText(CSPDocumentProvider.getTextFromEditor());
+		String editorContent = CSPDocumentProvider.getTextFromEditor();
+		// TODO: Editor nulo retornar sem documento encontrado
+		CspParser parser = (CspParser) ParserUtil.getParserFromText(editorContent);
 		CspParser.SpecContext tree = parser.spec();
 
 		return tree;

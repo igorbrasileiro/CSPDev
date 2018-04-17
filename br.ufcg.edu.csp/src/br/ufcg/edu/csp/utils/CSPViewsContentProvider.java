@@ -39,7 +39,6 @@ public class CSPViewsContentProvider<T> implements ITreeContentProvider{
 
 	@Override
 	public Object[] getElements(Object obj) {
-		// TODO: regra do parser simpleDefinition
 		ArrayList<T> elementos = new ArrayList<>();
 		if(obj instanceof CspParser.SpecContext){
 			getElements(obj, elementos);

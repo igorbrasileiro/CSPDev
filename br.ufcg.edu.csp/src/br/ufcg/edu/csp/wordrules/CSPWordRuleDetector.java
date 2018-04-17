@@ -22,7 +22,6 @@ public class CSPWordRuleDetector implements IWordDetector {
 		return charPart.contains(String.valueOf(c));
 	}
 	
-	// TODO completar char das palavras reservadas
 	private boolean identifyCharacter(char c) {
 		return  
 				Character.isJavaIdentifierPart(c)

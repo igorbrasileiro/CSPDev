@@ -16,7 +16,6 @@ public class CSPGraphServices {
 		try {
 			gvj.ploting(nodes);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}

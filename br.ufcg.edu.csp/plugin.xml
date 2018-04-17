@@ -100,7 +100,7 @@
          point="org.eclipse.ui.views">
       <view
             class="br.ufcg.edu.csp.counterexampleView.ProcessCheckerListView"
-            id="br.ufcg.edu.csp.view1"
+            id="br.ufcg.edu.csp.processcheckerview"
             name="Assert List View"
             restorable="true">
       </view>

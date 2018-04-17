@@ -9,11 +9,10 @@ import br.ufcg.edu.csp.counterexampleView.ProcessCheckerListView;
 public class CSPEditorToOutlineAdapterFactory implements IAdapterFactory {
 
 	private CSPOutlinePage myPage;
-	private ProcessCheckerListView pclsPage;
 
 	@Override
 	public Class<?>[] getAdapterList() {
-		return new Class<?>[] { IContentOutlinePage.class, ProcessCheckerListView.class };
+		return new Class<?>[] { IContentOutlinePage.class};
 	}
 
 	@SuppressWarnings("unchecked")
@@ -25,12 +24,6 @@ public class CSPEditorToOutlineAdapterFactory implements IAdapterFactory {
 			}
 			
 			return (T) myPage;
-		} else if(ProcessCheckerListView.class.equals(adapterType)) {
-			if(pclsPage == null) {
-				pclsPage = new ProcessCheckerListView();
-			}
-			
-			return (T) pclsPage;
 		}
 
 		return null;
