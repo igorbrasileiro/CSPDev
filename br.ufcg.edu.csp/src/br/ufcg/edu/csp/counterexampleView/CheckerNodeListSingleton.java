@@ -2,6 +2,8 @@ package br.ufcg.edu.csp.counterexampleView;
 
 import java.util.ArrayList;
 
+import org.eclipse.ui.PlatformUI;
+
 public class CheckerNodeListSingleton {
 
 	private ArrayList<CheckerNodeDecorator> list;
@@ -20,7 +22,17 @@ public class CheckerNodeListSingleton {
 	}
 	
 	public void updateList(CheckerNodeDecorator node) {
-		list.add(node);
+		// node condition failed and exists one there
+		if(list.contains(node) && node.getCheckCondition()) {
+			list.remove(node);
+		} else if(!list.contains(node) && !node.getCheckCondition()) {
+			// add node if doesn't exist and failed
+			list.add(node);
+		}
+		updateCounterexampleListView();
+	}
+	
+	private void updateCounterexampleListView() {
 		/* CODIGO UTIL
 		 * for(IWorkbenchWindow workbench : PlatformUI.getWorkbench().getWorkbenchWindows()) {
 				for(IWorkbenchPage workbenchPage : workbench.getPages()) {
@@ -28,10 +40,24 @@ public class CheckerNodeListSingleton {
 				}
 			}
 		 */
-		updateListners();
+		CounterexampleListView clv = (CounterexampleListView) PlatformUI.getWorkbench().
+				getActiveWorkbenchWindow().getActivePage().
+					findView("br.ufcg.edu.csp.CounterexampleListView");
+		
+		if(clv != null) {
+			clv.updateContent(getListContent());
+		}
 	}
 	
-	private void updateListners() {
-		//TODO: atualizar observers
+	public Object[] getListContent() {
+		if(list.size() == 0) {
+			return null;
+		} else {
+			return list.toArray();
+		}
+	}
+
+	public boolean containsNode(CheckerNodeDecorator node) {
+		return list.contains(node);
 	}
  }

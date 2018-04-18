@@ -104,6 +104,12 @@
             name="Assert List View"
             restorable="true">
       </view>
+      <view
+            class="br.ufcg.edu.csp.counterexampleView.CounterexampleListView"
+            id="br.ufcg.edu.csp.CounterexampleListView"
+            name="Counterexample View"
+            restorable="true">
+      </view>
    </extension>
    
 <!--   

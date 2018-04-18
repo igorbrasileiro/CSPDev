@@ -77,7 +77,9 @@ public class CSPDocumentProvider extends FileDocumentProvider implements IDocume
 	}
 	
 	private void updateProcessCheckerListView() {
-		ProcessCheckerListView pclv = (ProcessCheckerListView) PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().findView("br.ufcg.edu.csp.processcheckerview");
+		ProcessCheckerListView pclv = (ProcessCheckerListView) PlatformUI.getWorkbench().
+				getActiveWorkbenchWindow().getActivePage().
+					findView("br.ufcg.edu.csp.processcheckerview");
 		if(pclv != null) {
 			pclv.updateContent();
 		}
