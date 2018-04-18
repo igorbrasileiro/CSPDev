@@ -84,7 +84,6 @@ public class FDRServiceTest {
 	
    public static void main(String[] args) {
 	   FDRServiceTest fdrteste = new FDRServiceTest();
-	   //TODO Criar Debug Context com contra exemplo;
 	   fdrteste.getTraceUpDownDeadlock();
 	   fdrteste.getTraceUpDownInternalDeterministic();
 	   fdrteste.getTraceUpDownInternalDeterministic();

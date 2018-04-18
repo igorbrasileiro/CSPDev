@@ -3,7 +3,6 @@ package br.ufcg.edu.csp.counterexampleView;
 import java.io.File;
 
 import javax.inject.Inject;
-import javax.swing.text.TableView;
 
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IMenuListener;
@@ -12,10 +11,8 @@ import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.text.DocumentEvent;
-import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.IDocumentListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.jface.viewers.ListViewer;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
@@ -43,6 +40,7 @@ public class ProcessCheckerListView extends ViewPart implements IDocumentListene
 	private Action determinismChecker;
 	private Action deadlockChecker;
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public void createPartControl(Composite parent) {
 		// ISelectionChangedListner
@@ -63,13 +61,16 @@ public class ProcessCheckerListView extends ViewPart implements IDocumentListene
 		hookContextMenu();
 	}
 
+	/*
 	private void addDocumentListner() {
 		IDocument document = CSPDocumentProvider.getDocument();
 		if(document != null) {
 			document.addDocumentListener(this);
 		}
 	}
-
+	*/
+	
+	@SuppressWarnings("unchecked")
 	public void updateContent() {
 		//viewer.setContentProvider(new CSPOutlineContentProvider());
 		//viewer.setLabelProvider(new ViewLabelProvider());

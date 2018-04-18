@@ -3,7 +3,6 @@ package br.ufcg.edu.csp.outline;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.StructuredViewer;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.views.contentoutline.ContentOutlinePage;
 
 import br.ufcg.edu.csp.utils.CSPViewsContentProvider;
@@ -16,6 +15,7 @@ public class CSPOutlinePage extends ContentOutlinePage {
 
 	public CSPOutlinePage() { }
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public void createControl(Composite parent) {
 		super.createControl(parent);
@@ -26,6 +26,7 @@ public class CSPOutlinePage extends ContentOutlinePage {
 		viewer.setInput((((CSPViewsContentProvider<ExpressionNodeDecorator>) viewer.getContentProvider()).getTree()));
 	}
 
+	@SuppressWarnings("unchecked")
 	public void updateContent(){
 		//viewer= getTreeViewer();
 		//viewer.setContentProvider(new CSPOutlineContentProvider());

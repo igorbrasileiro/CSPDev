@@ -16,17 +16,14 @@ import org.eclipse.jface.text.IDocumentPartitioner;
 import org.eclipse.jface.text.rules.FastPartitioner;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
-import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.editors.text.FileDocumentProvider;
-import org.eclipse.ui.part.ViewPart;
 import org.eclipse.ui.texteditor.AbstractTextEditor;
 import org.eclipse.ui.texteditor.IDocumentProvider;
-import org.eclipse.ui.texteditor.ITextEditor;
 import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
 
 import br.ufcg.edu.csp.counterexampleView.ProcessCheckerListView;
@@ -37,7 +34,6 @@ import br.ufcg.edu.csp.outline.CSPOutlinePage;
 public class CSPDocumentProvider extends FileDocumentProvider implements IDocumentListener {
 
 	private ReportErrorMarker errorReport;
-	private static IDocument document;
 	
 	public CSPDocumentProvider() {
 		errorReport = ReportErrorMarker.getInstance();
@@ -53,10 +49,9 @@ public class CSPDocumentProvider extends FileDocumentProvider implements IDocume
 			partitioner.connect(document);
 			document.setDocumentPartitioner(partitioner);
 			document.addDocumentListener(this);
-			this.document = document;
 		}
 		
-		return this.document;
+		return document;
 	}
 	
 	@Override
@@ -90,10 +85,6 @@ public class CSPDocumentProvider extends FileDocumentProvider implements IDocume
 		CSPOutlinePage outlinePage = (CSPOutlinePage) Adapters.adapt(part, IContentOutlinePage.class);// aqui faz o parse 
 		if(outlinePage != null)
 			outlinePage.updateContent();
-	}
-	
-	public static IDocument getDocument() {
-		return document;
 	}
 	
 	public static File getEditorFile() {

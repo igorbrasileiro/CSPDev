@@ -1,6 +1,5 @@
 package br.ufcg.edu.csp.fdrAnalyser;
 
-import java.io.PrintStream;
 import java.util.ArrayList;
 
 import uk.ac.ox.cs.fdr.Assertion;

@@ -1,10 +1,8 @@
 package br.ufcg.edu.csp.outline;
 
 import org.eclipse.core.runtime.IAdapterFactory;
-import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
 
-import br.ufcg.edu.csp.counterexampleView.ProcessCheckerListView;
 
 public class CSPEditorToOutlineAdapterFactory implements IAdapterFactory {
 

@@ -7,7 +7,7 @@ import uk.ac.ox.cs.fdr.Assertion;
 
 public class DeterministicChecker extends FDRServices implements FDRChecker {
 	
-	private static final String CHECKER_DECLARATION = " :[deadlock free [FD]]";
+	private static final String CHECKER_DECLARATION = " :[deterministic [FD]]";
 
 	public DeterministicChecker(String fileName) {
 		super(fileName);
