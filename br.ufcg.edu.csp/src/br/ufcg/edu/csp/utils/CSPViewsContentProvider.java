@@ -54,6 +54,7 @@ public class CSPViewsContentProvider<T> implements ITreeContentProvider{
 	 * @param obj
 	 * @param list
 	 */
+	@SuppressWarnings("unchecked")
 	private void getElements(Object obj, ArrayList<T> list) {
 		if(obj instanceof CspParser.SpecContext){
 			// regra de muitos filhos

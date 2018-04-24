@@ -60,22 +60,10 @@ public class ProcessCheckerListView extends ViewPart implements IDocumentListene
 		makeActions();
 		hookContextMenu();
 	}
-
-	/*
-	private void addDocumentListner() {
-		IDocument document = CSPDocumentProvider.getDocument();
-		if(document != null) {
-			document.addDocumentListener(this);
-		}
-	}
-	*/
 	
 	@SuppressWarnings("unchecked")
 	public void updateContent() {
-		//viewer.setContentProvider(new CSPOutlineContentProvider());
-		//viewer.setLabelProvider(new ViewLabelProvider());
 		viewer.setInput((((CSPViewsContentProvider<CheckerNodeDecorator>) viewer.getContentProvider()).getTree()));
-		//getSite().setSelectionProvider(viewer);
 	}
 
 	private void hookContextMenu() {
