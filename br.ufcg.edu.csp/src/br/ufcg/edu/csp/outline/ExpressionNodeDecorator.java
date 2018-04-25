@@ -1,10 +1,8 @@
 package br.ufcg.edu.csp.outline;
 
 import org.antlr.v4.runtime.tree.ParseTree;
-import org.antlr.v4.runtime.tree.TerminalNode;
 import org.antlr.v4.runtime.tree.TerminalNodeImpl;
 
-import br.ufcg.edu.csp.parser.CspParser;
 import br.ufcg.edu.csp.utils.INodeDecorator;
 
 public class ExpressionNodeDecorator implements INodeDecorator{

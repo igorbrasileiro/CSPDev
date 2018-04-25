@@ -14,6 +14,8 @@ public class CheckerNodeDecorator implements INodeDecorator {
 
 	public CheckerNodeDecorator(ParseTree node) {
 		this.node = node;
+		this.checkCondition = false;
+		this.isCounterexampleNode = false;
 	}
 	
 	public ParseTree getNode() {
@@ -56,6 +58,10 @@ public class CheckerNodeDecorator implements INodeDecorator {
 	
 	public void setNodeAsCounterexampleNode() {
 		this.isCounterexampleNode = true;
+	}
+	
+	public boolean getIsCounterexampleNode() {
+		return this.isCounterexampleNode;
 	}
 	
 	public String getNodeName() { 

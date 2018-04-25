@@ -4,11 +4,8 @@ import java.util.ArrayList;
 
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ParseTree;
-import org.antlr.v4.runtime.tree.TerminalNode;
-import org.antlr.v4.runtime.tree.TerminalNodeImpl;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 
-import br.ufcg.edu.csp.counterexampleView.CheckerNodeDecorator;
 import br.ufcg.edu.csp.outline.ExpressionNodeDecorator;
 import br.ufcg.edu.csp.parser.CspParser;
 import br.ufcg.edu.csp.parser.ParserUtil;
@@ -98,13 +95,6 @@ public class CSPViewsContentProvider<T> implements ITreeContentProvider {
 		}
 	}
 	
-	
-	private boolean isOperator(ParseTree newNode) {
-		return (newNode.getText().equals("[]")
-		|| newNode.getText().equals("->")
-		|| newNode.getText().equals("|~|"));
-	}
-
 	@Override
 	public Object[] getChildren(Object obj) {
 		ArrayList<T> elementos = new ArrayList<>();

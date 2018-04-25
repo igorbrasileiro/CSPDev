@@ -17,6 +17,14 @@ public class CSPViewLabelProvider  extends LabelProvider implements ITableLabelP
 	}
 	@Override
 	public Image getImage(Object obj) {
-		return PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJ_ELEMENT);
+		if(((CheckerNodeDecorator)obj).getIsCounterexampleNode()) {
+			if(((CheckerNodeDecorator)obj).getCheckCondition()) {
+				return PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJS_INFO_TSK);
+			} else {
+				return PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJS_ERROR_TSK);
+			}
+		} else {
+			return PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJS_INFO_TSK);
+		}
 	}
 }
