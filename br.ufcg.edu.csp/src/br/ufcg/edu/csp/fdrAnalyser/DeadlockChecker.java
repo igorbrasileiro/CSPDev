@@ -19,7 +19,7 @@ public class DeadlockChecker extends FDRServices implements FDRChecker {
 	
 	@Override
 	public String[] getCounterExamples(String processName) {
-		String assertString = processName + CHECKER_DECLARATION;
+		String assertString = getAssertionText(processName);
 
 		Assertion assertion = getAssertion(assertString);
 		
@@ -32,7 +32,7 @@ public class DeadlockChecker extends FDRServices implements FDRChecker {
 
 	public Boolean checkDeadlockFree(String processName) {
 		// :[deadlock free [FD]]
-		String assertString = processName + CHECKER_DECLARATION;
+		String assertString = getAssertionText(processName);
 
 		Assertion assertion = getAssertion(assertString);
 		Boolean result = null;
@@ -41,5 +41,10 @@ public class DeadlockChecker extends FDRServices implements FDRChecker {
 		}
 		
 		return result;
+	}
+
+	@Override
+	public String getAssertionText(String processName) {
+		return processName + CHECKER_DECLARATION;
 	}
 }

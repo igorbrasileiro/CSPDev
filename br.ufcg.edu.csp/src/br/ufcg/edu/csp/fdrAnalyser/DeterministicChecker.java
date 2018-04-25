@@ -20,7 +20,7 @@ public class DeterministicChecker extends FDRServices implements FDRChecker {
 	
 	@Override
 	public String[] getCounterExamples(String processName) {
-		String assertString = processName + CHECKER_DECLARATION;
+		String assertString = getAssertionText(processName);
 
 		Assertion assertion = getAssertion(assertString);
 		
@@ -33,7 +33,7 @@ public class DeterministicChecker extends FDRServices implements FDRChecker {
 	
 	public Boolean checkDeterministic(String processName) {
 		//assert P :[deterministic]
-		String assertString = processName + CHECKER_DECLARATION;
+		String assertString = getAssertionText(processName);
 		
 		Assertion assertion = getAssertion(assertString);
 		
@@ -43,5 +43,10 @@ public class DeterministicChecker extends FDRServices implements FDRChecker {
 		}
 		
 		return result;
+	}
+
+	@Override
+	public String getAssertionText(String processName) {
+		return processName + CHECKER_DECLARATION;
 	}
 }

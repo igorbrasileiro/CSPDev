@@ -6,4 +6,6 @@ public interface FDRChecker {
 	
 	public String[] getCounterExamples(String processName);
 	
+	public String getAssertionText(String processName);
+	
 }

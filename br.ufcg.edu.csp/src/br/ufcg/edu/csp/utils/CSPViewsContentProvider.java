@@ -11,7 +11,7 @@ import br.ufcg.edu.csp.counterexampleView.CheckerNodeDecorator;
 import br.ufcg.edu.csp.parser.CspParser;
 import br.ufcg.edu.csp.parser.ParserUtil;
 
-public class CSPViewsContentProvider<T> implements ITreeContentProvider{
+public class CSPViewsContentProvider<T> implements ITreeContentProvider {
 	private INodeFactory factory;
 
 	public CSPViewsContentProvider(INodeFactory factory) {

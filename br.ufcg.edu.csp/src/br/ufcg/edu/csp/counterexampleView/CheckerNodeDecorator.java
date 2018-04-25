@@ -9,6 +9,8 @@ public class CheckerNodeDecorator implements INodeDecorator {
 	private ParseTree node;
 	private boolean checkCondition;
 	private String[] counterexamples;
+	private String assertionText;
+	private boolean isCounterexampleNode;
 
 	public CheckerNodeDecorator(ParseTree node) {
 		this.node = node;
@@ -16,11 +18,6 @@ public class CheckerNodeDecorator implements INodeDecorator {
 	
 	public ParseTree getNode() {
 		return this.node;
-	}
-	
-	@Override
-	public String toString() {
-		return node.getChild(0).getText();
 	}
 	
 	public boolean getCheckCondition() {
@@ -37,16 +34,43 @@ public class CheckerNodeDecorator implements INodeDecorator {
 	
 	public void setCounterexamples(String[] nodeCounterexamples) {
 		this.counterexamples = nodeCounterexamples;
-		
 	}
 
 	@Override
 	public boolean equals (Object o) {
-		return this.toString().equals(o.toString());
+		return this.getNodeName().equals(((CheckerNodeDecorator)o).getNodeName());
 	}
 
 	@Override
 	public void setNode(ParseTree node) {
 		this.node = node;
+	}
+
+	public String getAssertionText() {
+		return assertionText;
+	}
+
+	public void setAssertionText(String assertionText) {
+		this.assertionText = assertionText;
+	}
+	
+	public void setNodeAsCounterexampleNode() {
+		this.isCounterexampleNode = true;
+	}
+	
+	public String getNodeName() { 
+		return node.getChild(0).getText();
+	}
+	
+	@Override
+	public String toString() {
+		String text;
+		if(isCounterexampleNode) {
+			text =  getAssertionText() + " - Passed: " + (getCheckCondition() ? "✓" : "x");
+		} else {
+			text =  getNodeName();
+		}
+		
+		return text;
 	}
 }

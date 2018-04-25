@@ -8,6 +8,7 @@ import org.eclipse.jface.action.Action;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.ListViewer;
+import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.PlatformUI;
@@ -21,15 +22,15 @@ import br.ufcg.edu.csp.fdrAnalyser.CSPGraphServices;
 
 public class CounterexampleListView extends ViewPart {
 
-	private ListViewer viewer;
+	private TableViewer viewer;
 	private CheckerNodeListSingleton cnls;
 	private Action doubleClickAction;
 	private String projectFilePath;
 	
 	@Override
 	public void createPartControl(Composite parent) {
-		viewer = new ListViewer(parent, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL);
-		viewer.setContentProvider(ArrayContentProvider.getInstance());
+		viewer = new TableViewer(parent, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL);
+		viewer.setContentProvider(new CounterexampleContentProvider());
 		viewer.setLabelProvider(new CSPViewLabelProvider());
 		
 		cnls = CheckerNodeListSingleton.getInstance();

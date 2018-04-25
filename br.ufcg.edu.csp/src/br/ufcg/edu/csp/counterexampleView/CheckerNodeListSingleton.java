@@ -22,11 +22,12 @@ public class CheckerNodeListSingleton {
 	}
 	
 	public void updateList(CheckerNodeDecorator node) {
-		// node condition failed and exists one there
-		if(list.contains(node) && node.getCheckCondition()) {
-			list.remove(node);
-		} else if(!list.contains(node) && !node.getCheckCondition()) {
-			// add node if doesn't exist and failed
+		node.setNodeAsCounterexampleNode();
+		if(list.contains(node)) {
+			int index = list.indexOf(node);
+			CheckerNodeDecorator existentNode = list.get(index);
+			existentNode.setCheckCondition(node.getCheckCondition());
+		} else if(!list.contains(node)) {
 			list.add(node);
 		}
 		updateCounterexampleListView();

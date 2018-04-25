@@ -19,7 +19,7 @@ public class DivergenceChecker extends FDRServices implements FDRChecker {
 
 	@Override
 	public String[] getCounterExamples(String processName) {
-		String assertString = processName + CHECKER_DECLARATION;
+		String assertString = getAssertionText(processName);
 
 		Assertion assertion = getAssertion(assertString);
 		
@@ -32,7 +32,7 @@ public class DivergenceChecker extends FDRServices implements FDRChecker {
 	
 	private Boolean checkDivergenceFree(String processName) {
 		// :[divergence free [FD]]
-		String assertString = processName + CHECKER_DECLARATION;
+		String assertString = getAssertionText(processName);
 		
 		Assertion assertion = getAssertion(assertString);
 		
@@ -42,5 +42,10 @@ public class DivergenceChecker extends FDRServices implements FDRChecker {
 		}
 		
 		return result;
+	}
+
+	@Override
+	public String getAssertionText(String processName) {
+		return processName + CHECKER_DECLARATION;
 	}
 }
