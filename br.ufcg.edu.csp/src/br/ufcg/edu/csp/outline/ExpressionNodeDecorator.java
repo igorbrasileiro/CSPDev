@@ -1,7 +1,10 @@
 package br.ufcg.edu.csp.outline;
 
 import org.antlr.v4.runtime.tree.ParseTree;
+import org.antlr.v4.runtime.tree.TerminalNode;
+import org.antlr.v4.runtime.tree.TerminalNodeImpl;
 
+import br.ufcg.edu.csp.parser.CspParser;
 import br.ufcg.edu.csp.utils.INodeDecorator;
 
 public class ExpressionNodeDecorator implements INodeDecorator{
@@ -28,8 +31,16 @@ public class ExpressionNodeDecorator implements INodeDecorator{
 		return null;
 	}
 	
+	public boolean hasChildren() {
+		return this.node.getChildCount() > 0;
+	}
+	
 	@Override
 	public String toString() {
-		return node.getText();
+		if(node instanceof TerminalNodeImpl) {
+			return node.getText();
+		} else {
+			return node.getChild(0).getText();
+		}
 	}
 }
