@@ -32,7 +32,7 @@ public class ExpressionNodeDecorator implements INodeDecorator{
 	}
 	
 	public boolean hasChildren() {
-		return this.node.getChildCount() > 0;
+		return this.node.getChildCount() > 1;
 	}
 	
 	@Override

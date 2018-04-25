@@ -29,7 +29,7 @@ public class CSPViewsContentProvider<T> implements ITreeContentProvider {
 
 		boolean result = false;
 		if(obj instanceof CspParser.DefinitionContext){
-			result = ((ParseTree) obj).getChildCount() > 0;
+			result = ((ParseTree) obj).getChildCount() > 1;
 		} else if(obj instanceof ExpressionNodeDecorator) {
 			result =  ((ExpressionNodeDecorator)obj).hasChildren();
 		}
@@ -72,10 +72,6 @@ public class CSPViewsContentProvider<T> implements ITreeContentProvider {
 			ParseTree node = ((ParseTree) obj).getChild(0);
 			getElements(node, list);
 		} else if(obj instanceof CspParser.SimpleDefinitionContext) {
-			// TODO assert entrando na regra de simple definition, falar com professor.
-			
-			// regra terminal para imprimir os processos
-			// debug String text = ((ParseTree) obj).getText();
 			INodeDecorator nodeDecorator = factory.createInstance();
 			nodeDecorator.setNode((ParseTree) obj);
 			list.add((T) nodeDecorator);
@@ -83,12 +79,21 @@ public class CSPViewsContentProvider<T> implements ITreeContentProvider {
 			getElements(((ParseTree)obj).getChild(0), list);
 		} else if(obj instanceof CspParser.ProcContext) {
 			ParseTree node = (ParseTree) obj;
-			for(int i = 0; i < node.getChildCount(); i++) {
-				if(!(node.getChild(i) instanceof TerminalNodeImpl)) {
-					INodeDecorator nodeDecorator = factory.createInstance();
-					nodeDecorator.setNode(node.getChild(i));
-					list.add((T) nodeDecorator);
-				}
+			INodeDecorator nodeDecorator;
+			// if it comes from any, has left proc OPERATOR proc2, need get the second proc
+			if(node.getParent() instanceof CspParser.AnyContext 
+					&& !node.getChild(1).getText().equals("->")) {
+				nodeDecorator = factory.createInstance();
+				nodeDecorator.setNode(node.getChild(0));
+				list.add((T) nodeDecorator);
+				
+				nodeDecorator = factory.createInstance();
+				nodeDecorator.setNode(node.getChild(2));
+				list.add((T) nodeDecorator);
+			} else {
+				nodeDecorator = factory.createInstance();
+				nodeDecorator.setNode(node);
+				list.add((T) nodeDecorator);
 			}
 		}
 	}
@@ -108,14 +113,8 @@ public class CSPViewsContentProvider<T> implements ITreeContentProvider {
 			if(node instanceof CspParser.SimpleDefinitionContext) {
 				// pega regra any
 				getElements(node.getChild(2), elementos);
-			} else {
-				for(int i = 0; i < node.getChildCount(); i++) {
-					ParseTree newNode = node.getChild(i);
-					if(!(newNode instanceof TerminalNodeImpl) || !isOperator(newNode)) {
-						getElements(newNode, elementos);
-					}
-				}
-				
+			} else if(node instanceof CspParser.ProcContext) {
+				getElements(node.getChild(2), elementos);
 			}
 			
 		}
