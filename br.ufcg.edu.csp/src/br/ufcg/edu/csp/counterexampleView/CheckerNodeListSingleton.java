@@ -22,13 +22,20 @@ public class CheckerNodeListSingleton {
 	}
 	
 	public void updateList(CheckerNodeDecorator node) {
-		node.setNodeAsCounterexampleNode();
 		if(list.contains(node)) {
 			int index = list.indexOf(node);
 			CheckerNodeDecorator existentNode = list.get(index);
 			existentNode.setCheckCondition(node.getCheckCondition());
+			existentNode.setCounterexamples(node.getCounterexamples());
+			existentNode.setNode(node.getNode());
+			existentNode.setAssertionText(node.getAssertionText());
 		} else if(!list.contains(node)) {
-			list.add(node);
+			CheckerNodeDecorator newNode = new CheckerNodeDecorator(node.getNode());
+			newNode.setNodeAsCounterexampleNode();
+			newNode.setCheckCondition(node.getCheckCondition());
+			newNode.setCounterexamples(node.getCounterexamples());
+			newNode.setAssertionText(node.getAssertionText());
+			list.add(newNode);
 		}
 		updateCounterexampleListView();
 	}

@@ -14,4 +14,4 @@ Require-Bundle: org.eclipse.ui.editors;bundle-version="3.11.0",
 Bundle-ClassPath: .,
  fdr.jar,
  antlr4-4.7.1-SNAPSHOT-complete.jar,
- cspGraphviz.jar
+ GraphCreator.jar

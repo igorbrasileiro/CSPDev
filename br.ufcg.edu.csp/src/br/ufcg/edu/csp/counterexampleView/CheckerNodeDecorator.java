@@ -6,16 +6,19 @@ import br.ufcg.edu.csp.utils.INodeDecorator;
 
 public class CheckerNodeDecorator implements INodeDecorator {
 	
+	private boolean isCounterexampleNode;
+	
 	private ParseTree node;
 	private boolean checkCondition;
 	private String[] counterexamples;
 	private String assertionText;
-	private boolean isCounterexampleNode;
+	
 
 	public CheckerNodeDecorator(ParseTree node) {
 		this.node = node;
 		this.checkCondition = false;
 		this.isCounterexampleNode = false;
+		this.assertionText = "";
 	}
 	
 	public ParseTree getNode() {
@@ -40,7 +43,7 @@ public class CheckerNodeDecorator implements INodeDecorator {
 
 	@Override
 	public boolean equals (Object o) {
-		return this.getNodeName().equals(((CheckerNodeDecorator)o).getNodeName());
+		return this.getAssertionText().equals(((CheckerNodeDecorator)o).getAssertionText());
 	}
 
 	@Override

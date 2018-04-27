@@ -134,15 +134,18 @@ public class ProcessCheckerListView extends ViewPart implements IDocumentListene
 			boolean checkCondition = checker.checkProcess(node.getNodeName()); // capturar um boolean
 			node.setAssertionText(checker.getAssertionText(node.getNodeName()));
 			node.setCheckCondition(checkCondition);
-			updateCheckerNodeList(checker,node);
+			
+			if(!node.getCheckCondition()) {
+				String[] nodeCounterexamples = checker.getCounterExamples(node.getNodeName());
+				node.setCounterexamples(nodeCounterexamples);
+			}
+			
+			updateCheckerNodeList(node);
 		}
 	}
 
-	private void updateCheckerNodeList(FDRChecker checker, CheckerNodeDecorator node) {
+	private void updateCheckerNodeList(CheckerNodeDecorator node) {
 		CheckerNodeListSingleton checkerNodeList = CheckerNodeListSingleton.getInstance();
-		String[] nodeCounterexamples = checker.getCounterExamples(node.getNodeName());	
-		if(!node.getCheckCondition())
-			node.setCounterexamples(nodeCounterexamples);
 		checkerNodeList.updateList(node);
 	}
 
