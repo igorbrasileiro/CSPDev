@@ -11,4 +11,7 @@ An IDE for [CSP](https://en.wikipedia.org/wiki/Communicating_sequential_processe
 ## Instructions to use/install Process Analyser:
 Open eclipse, `Window -> Show View -> Other` open `Other` folder and select `Assert List View` or `Counterexample View`  
 - Assert List View: show all process from '.csp' open file. Right Click on process to __Check__ !  
-- Counterexample View: press double click on process, if process failed it will open an __Eclipse Browser__ with counterexample.
+- Counterexample View: press double click on process, if process failed it will open an __Eclipse Browser__ with counterexample.  
+
+
+**OBS** This project uses CSP BNF grammar from this [repository](https://github.com/igorbrasileiro/csp-grammar)
