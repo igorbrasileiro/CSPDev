@@ -1,5 +1,6 @@
 # Editor-CSP
-Projeto de um editor para a linguagem CSP no eclipse.
+An IDE for [CSP](https://en.wikipedia.org/wiki/Communicating_sequential_processes) integrated with FDR tool.  
+[PT-BR] Uma IDE para [CSP](https://pt.wikipedia.org/wiki/CSP) integrada a ferramenta FDR.
 
 ## Requirements to use Process Analyser
 1. Install FDR. [Download link here](https://www.cs.ox.ac.uk/projects/fdr/)
