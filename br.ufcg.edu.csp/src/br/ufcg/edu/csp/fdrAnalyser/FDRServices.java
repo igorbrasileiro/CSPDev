@@ -97,7 +97,6 @@ public class FDRServices {
 			}
 				
 		}
-		
 		/*
 		 if (recurse) {
 			for (Behaviour child : debugContext.behaviourChildren(behaviour))
@@ -105,4 +104,26 @@ public class FDRServices {
 		} 
 		*/
 	}
+	
+	public boolean checkAssertion(String assertionText) {
+		Assertion assertion = getAssertion(assertionText);
+		Boolean result = null;
+		if(assertion != null ) {
+			result = assertion.passed();
+		}
+		
+		return result;
+	}
+	
+	public String[] getCounterExamples(String assertionText) {
+
+		Assertion assertion = getAssertion(assertionText);
+		
+		ArrayList<String> listCounterExample = new ArrayList<>();
+		
+		describeCounterexample(assertion, listCounterExample);
+		
+		return listCounterExample.toArray(new String[1]);
+	}
+	
 }

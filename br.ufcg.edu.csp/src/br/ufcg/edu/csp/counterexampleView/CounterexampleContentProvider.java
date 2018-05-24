@@ -2,8 +2,7 @@ package br.ufcg.edu.csp.counterexampleView;
 
 import org.eclipse.jface.viewers.ITreeContentProvider;
 
-public class CounterexampleContentProvider implements ITreeContentProvider{
-
+public class CounterexampleContentProvider implements ITreeContentProvider {
 	@Override
 	public Object[] getElements(Object inputElement) {
 			
@@ -27,5 +26,4 @@ public class CounterexampleContentProvider implements ITreeContentProvider{
 		// TODO Auto-generated method stub
 		return false;
 	}
-
 }

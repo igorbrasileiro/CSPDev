@@ -2,6 +2,7 @@ package br.ufcg.edu.csp.counterexampleView;
 
 import org.antlr.v4.runtime.tree.ParseTree;
 
+import br.ufcg.edu.csp.parser.CspParser;
 import br.ufcg.edu.csp.utils.INodeDecorator;
 
 public class CheckerNodeDecorator implements INodeDecorator {
@@ -75,7 +76,9 @@ public class CheckerNodeDecorator implements INodeDecorator {
 	public String toString() {
 		String text;
 		if(isCounterexampleNode) {
-			text =  getAssertionText() + " - Passed: " + (getCheckCondition() ? "✓" : "x");
+			text =  getAssertionText();
+		} else if(node instanceof CspParser.AssertDefinitionContext) {
+			text = node.getText();
 		} else {
 			text =  getNodeName();
 		}

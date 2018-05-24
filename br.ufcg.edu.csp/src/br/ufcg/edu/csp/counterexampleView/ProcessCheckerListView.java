@@ -4,6 +4,7 @@ import java.io.File;
 
 import javax.inject.Inject;
 
+import org.antlr.v4.runtime.tree.ParseTree;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.IMenuManager;
@@ -12,6 +13,8 @@ import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.text.DocumentEvent;
 import org.eclipse.jface.text.IDocumentListener;
+import org.eclipse.jface.viewers.DoubleClickEvent;
+import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
@@ -28,6 +31,8 @@ import br.ufcg.edu.csp.fdrAnalyser.DeadlockChecker;
 import br.ufcg.edu.csp.fdrAnalyser.DeterministicChecker;
 import br.ufcg.edu.csp.fdrAnalyser.DivergenceChecker;
 import br.ufcg.edu.csp.fdrAnalyser.FDRChecker;
+import br.ufcg.edu.csp.fdrAnalyser.FDRServices;
+import br.ufcg.edu.csp.parser.CspParser;
 import br.ufcg.edu.csp.utils.CSPViewsContentProvider;
 import br.ufcg.edu.csp.utils.CheckerNodeFactory;
 
@@ -39,6 +44,7 @@ public class ProcessCheckerListView extends ViewPart implements IDocumentListene
 	private Action divergenceChecker;
 	private Action determinismChecker;
 	private Action deadlockChecker;
+	private Action doubleClickAction;
 
 	@SuppressWarnings("unchecked")
 	@Override
@@ -49,9 +55,9 @@ public class ProcessCheckerListView extends ViewPart implements IDocumentListene
 
 		viewer = new TableViewer(parent, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL);
 
-		viewer.setContentProvider(new CSPViewsContentProvider<CheckerNodeDecorator>(new CheckerNodeFactory()));
+		viewer.setContentProvider(new CSPCheckerContentProvider(new CheckerNodeFactory()));
 		viewer.setLabelProvider(new CSPViewLabelProvider());
-		viewer.setInput((((CSPViewsContentProvider<CheckerNodeDecorator>) viewer.getContentProvider()).getTree()));	   
+		viewer.setInput((((CSPCheckerContentProvider) viewer.getContentProvider()).getTree()));	   
 
 		// Create the help context id for the viewer's control
 		//Control control = viewer.getControl();
@@ -63,7 +69,7 @@ public class ProcessCheckerListView extends ViewPart implements IDocumentListene
 	
 	@SuppressWarnings("unchecked")
 	public void updateContent() {
-		viewer.setInput((((CSPViewsContentProvider<CheckerNodeDecorator>) viewer.getContentProvider()).getTree()));
+		viewer.setInput((((CSPCheckerContentProvider) viewer.getContentProvider()).getTree()));
 	}
 
 	private void hookContextMenu() {
@@ -121,6 +127,14 @@ public class ProcessCheckerListView extends ViewPart implements IDocumentListene
 
 			divergenceChecker.setText("Check Divergence");
 			divergenceChecker.setImageDescriptor(getImageDescriptor());
+			
+			doubleClickAction = new Action() {
+				public void run() {
+					doubleClick();
+				}
+			};
+			
+			hookDoubleClickAction();
 		}
 	}
 
@@ -177,12 +191,34 @@ public class ProcessCheckerListView extends ViewPart implements IDocumentListene
 		updateContent();
 	}
 
-	/* CODIGO UTIL
-	 * for(IWorkbenchWindow workbench : PlatformUI.getWorkbench().getWorkbenchWindows()) {
-			for(IWorkbenchPage workbenchPage : workbench.getPages()) {
-				workbenchPage.getPart(); //nome da viewpart
+	public void doubleClick() {
+		IStructuredSelection selection = viewer.getStructuredSelection();
+		Object obj = selection.getFirstElement();
+		
+		if(obj instanceof CheckerNodeDecorator
+				&& ((CheckerNodeDecorator) obj).getNode() instanceof CspParser.AssertDefinitionContext) {
+			FDRServices checker = new FDRServices(getEditorFileName());
+			CheckerNodeDecorator node = ((CheckerNodeDecorator) obj);
+			ParseTree tnode = node.getNode();
+			
+			String assertString = tnode.getText().substring(6);
+			boolean checkCondition = checker.checkAssertion(assertString);
+		
+			node.setAssertionText(assertString);
+			node.setCheckCondition(checkCondition);
+			
+			if(!node.getCheckCondition()) {
+				String[] nodeCounterexamples = checker.getCounterExamples(assertString);
+				node.setCounterexamples(nodeCounterexamples);
 			}
+			
+			updateCheckerNodeList(node);
 		}
-	 */
+		
+	}
+	
+	private void hookDoubleClickAction() {
+		viewer.addDoubleClickListener(o -> doubleClickAction.run());
+	}
 
 }

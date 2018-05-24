@@ -1,4 +1,4 @@
-package br.ufcg.edu.csp.utils;
+package br.ufcg.edu.csp.counterexampleView;
 
 import java.util.ArrayList;
 
@@ -10,11 +10,14 @@ import org.eclipse.jface.viewers.ITreeContentProvider;
 import br.ufcg.edu.csp.outline.ExpressionNodeDecorator;
 import br.ufcg.edu.csp.parser.CspParser;
 import br.ufcg.edu.csp.parser.ParserUtil;
+import br.ufcg.edu.csp.utils.INodeDecorator;
+import br.ufcg.edu.csp.utils.INodeFactory;
 
-public class CSPViewsContentProvider<T> implements ITreeContentProvider {
+public class CSPCheckerContentProvider implements ITreeContentProvider {
+
 	private INodeFactory factory;
 
-	public CSPViewsContentProvider(INodeFactory factory) {
+	public CSPCheckerContentProvider(INodeFactory factory) {
 		this.factory = factory;
 	}
 
@@ -41,7 +44,7 @@ public class CSPViewsContentProvider<T> implements ITreeContentProvider {
 
 	@Override
 	public Object[] getElements(Object obj) {
-		ArrayList<T> elementos = new ArrayList<>();
+		ArrayList elementos = new ArrayList<>();
 		if(obj instanceof CspParser.SpecContext){
 			getElements(obj, elementos);
 		} else if (obj instanceof INodeDecorator){
@@ -59,7 +62,7 @@ public class CSPViewsContentProvider<T> implements ITreeContentProvider {
 	 * @param list
 	 */
 	@SuppressWarnings("unchecked")
-	private void getElements(Object obj, ArrayList<T> list) {
+	private void getElements(Object obj, ArrayList list) {
 		if(obj instanceof CspParser.SpecContext){
 			// regra de muitos filhos
 			int children = ((ParseTree) obj).getChildCount();
@@ -71,6 +74,8 @@ public class CSPViewsContentProvider<T> implements ITreeContentProvider {
 			// regra de filho unico
 			ParseTree node = ((ParseTree) obj).getChild(0);
 			getElements(node, list);
+		} else if(obj instanceof CspParser.AssertDefinitionContext) {
+			addNodeInList((ParseTree)obj, list);
 		} else if(obj instanceof CspParser.SimpleDefinitionContext) {
 			addNodeInList((ParseTree) obj, list);
 		} else if (obj instanceof CspParser.AnyContext) {
@@ -107,15 +112,15 @@ public class CSPViewsContentProvider<T> implements ITreeContentProvider {
 		}
 	}
 	
-	public void addNodeInList(ParseTree node, ArrayList<T> list) {
+	public void addNodeInList(ParseTree node, ArrayList list) {
 		INodeDecorator nodeDecorator = factory.createInstance();
 		nodeDecorator.setNode(node);
-		list.add((T) nodeDecorator);
+		list.add(nodeDecorator);
 	}
 	
 	@Override
 	public Object[] getChildren(Object obj) {
-		ArrayList<T> elementos = new ArrayList<>();
+		ArrayList elementos = new ArrayList<>();
 		if (obj instanceof ExpressionNodeDecorator) {
 			ParseTree node = ((ExpressionNodeDecorator) obj).getNode();
 			if(node instanceof CspParser.SimpleDefinitionContext) {
@@ -128,5 +133,4 @@ public class CSPViewsContentProvider<T> implements ITreeContentProvider {
 		}
 		return elementos.toArray();
 	}
-	
 }
