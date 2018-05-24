@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ParseTree;
+import org.antlr.v4.runtime.tree.TerminalNodeImpl;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 
 import br.ufcg.edu.csp.outline.ExpressionNodeDecorator;
@@ -69,30 +70,45 @@ public class CSPViewsContentProvider<T> implements ITreeContentProvider {
 			ParseTree node = ((ParseTree) obj).getChild(0);
 			getElements(node, list);
 		} else if(obj instanceof CspParser.SimpleDefinitionContext) {
-			INodeDecorator nodeDecorator = factory.createInstance();
-			nodeDecorator.setNode((ParseTree) obj);
-			list.add((T) nodeDecorator);
+			addNodeInList((ParseTree) obj, list);
 		} else if (obj instanceof CspParser.AnyContext) {
 			getElements(((ParseTree)obj).getChild(0), list);
 		} else if(obj instanceof CspParser.ProcContext) {
 			ParseTree node = (ParseTree) obj;
-			INodeDecorator nodeDecorator;
 			// if it comes from any, has left proc OPERATOR proc2, need get the second proc
-			if(node.getParent() instanceof CspParser.AnyContext 
-					&& !node.getChild(1).getText().equals("->")) {
-				nodeDecorator = factory.createInstance();
-				nodeDecorator.setNode(node.getChild(0));
-				list.add((T) nodeDecorator);
-				
-				nodeDecorator = factory.createInstance();
-				nodeDecorator.setNode(node.getChild(2));
-				list.add((T) nodeDecorator);
+			if(node.getChild(0) instanceof TerminalNodeImpl && node.getChild(1) instanceof TerminalNodeImpl) {
+				//ID ARROW proc
+				addNodeInList(node, list);
+			} else if(node.getChild(0).getText().equals("(")) {
+				// LPAREN proc RPAREN
+				getElements(node.getChild(1), list);
+			} else if(node.getChild(0) instanceof CspParser.ProcContext 
+					&& node.getChild(2) instanceof CspParser.ProcContext) {
+				// proc operator proc
+				addNodeInList(node.getChild(0), list);
+				addNodeInList(node.getChild(2), list);
+			} else if(node.getChild(0) instanceof CspParser.ProcContext
+					&& node.getChild(2) instanceof CspParser.SetContext) {
+				// proc LSYNC set RSYNC proc
+				addNodeInList(node.getChild(0), list);
+				addNodeInList(node.getChild(4), list);
+			} else if(node.getChild(0).getText().equals("if")) {
+				//if bool then proc else proc
+				addNodeInList(node.getChild(3), list);
+				addNodeInList(node.getChild(5), list);
+			} else if(node.getChild(0) instanceof CspParser.BoolExpContext) {
+				// boolexp guard proc
+				addNodeInList(node.getChild(2), list);
 			} else {
-				nodeDecorator = factory.createInstance();
-				nodeDecorator.setNode(node);
-				list.add((T) nodeDecorator);
+				addNodeInList(node, list);
 			}
 		}
+	}
+	
+	public void addNodeInList(ParseTree node, ArrayList<T> list) {
+		INodeDecorator nodeDecorator = factory.createInstance();
+		nodeDecorator.setNode(node);
+		list.add((T) nodeDecorator);
 	}
 	
 	@Override

@@ -33,15 +33,6 @@ public class FileServer {
 		// In this example it is the current directory but it can be configured to
 		// anything that the jvm has access to.
 		resource_handler.setDirectoriesListed(true);
-		File htmlpage = new File(this.htmlPagePath);
-		if (!htmlpage.exists()) {
-			try {
-				htmlpage.createNewFile();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
 
 		resource_handler.setWelcomeFiles(new String[] { this.htmlPagePath });
 		//resource_handler.setResourceBase(".");
