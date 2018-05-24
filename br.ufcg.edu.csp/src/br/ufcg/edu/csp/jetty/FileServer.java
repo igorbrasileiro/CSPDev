@@ -58,10 +58,8 @@ public class FileServer {
 		// "http://docs.oracle.com/javase/1.5.0/docs/api/java/lang/Thread.html#join()"
 		// for more details.
 		try {
-			synchronized (handlers) {
 				server.start();
-				server.join();
-			}
+				//server.join();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

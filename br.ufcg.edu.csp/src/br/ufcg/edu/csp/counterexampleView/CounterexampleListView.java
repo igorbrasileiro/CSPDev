@@ -102,7 +102,7 @@ public class CounterexampleListView extends ViewPart {
 	
 	public void startServer(String directory, String htmlPagePath) {
 		if(fileServer == null) {
-			FileServer fileServer = new FileServer(directory,htmlPagePath);
+			fileServer = new FileServer(directory,htmlPagePath);
 			fileServer.startServer();
 		}
 	}
