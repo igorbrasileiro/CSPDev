@@ -21,24 +21,4 @@ public class CSPWordRuleDetector implements IWordDetector {
 	public boolean isWordPart(char c) {
 		return charPart.contains(String.valueOf(c));
 	}
-	
-	// TODO completar char das palavras reservadas
-	private boolean identifyCharacter(char c) {
-		return  
-				Character.isJavaIdentifierPart(c)
-				|| c == '-' || c == '+'
-				|| c == '$' || c == '*'
-				|| c == '%' || c == '&'
-				|| c == "'".toCharArray()[0] // nao sei outra forma
-				|| c == ',' || c == '.'
-				|| c == '/' || c == '\\' 
-				|| c == '!' || c == '#'
-				|| c == '>' || c == '<'
-				|| c == '(' || c == ')' 
-				|| c == '[' || c == ']'
-				|| c == '{' || c == '}'
-				|| c == '|' || c == '~';
-		
-		// "'\"'", "'#'", "'$'", "'%'", "'&'", "'''", "'('", "')'", "'*'", "'+'", "','", "'-'", "'.'", "'/'"
-	}
 }

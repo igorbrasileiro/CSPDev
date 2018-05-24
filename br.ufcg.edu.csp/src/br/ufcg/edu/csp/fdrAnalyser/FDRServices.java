@@ -3,11 +3,17 @@ package br.ufcg.edu.csp.fdrAnalyser;
 import java.util.ArrayList;
 
 import uk.ac.ox.cs.fdr.Assertion;
+import uk.ac.ox.cs.fdr.Behaviour;
+import uk.ac.ox.cs.fdr.Counterexample;
+import uk.ac.ox.cs.fdr.DebugContext;
+import uk.ac.ox.cs.fdr.PropertyCounterexample;
+import uk.ac.ox.cs.fdr.RefinementCounterexample;
 import uk.ac.ox.cs.fdr.Session;
+import uk.ac.ox.cs.fdr.fdr;
 
 public class FDRServices {
 
-	private Session session;
+	protected Session session;
 
 	public FDRServices(String fileName) {
 		session = new Session();
@@ -27,18 +33,14 @@ public class FDRServices {
 		}
 	}
 	
-	/*
-	 * Assertion assertTeste = session.parseAssertion("UpDownP [T= OPEN").result();
-		assertTeste.execute(null);
-		System.out.println(assertTeste.passed());
-	 */
+	// Dead Method
 	/**
 	 * This method return a list with assertions strings from process given. 
 	 * First string is a Deadlock assertion. Second string is a Divergence assertion.
 	 * @param processName - the name of process that will be checked
 	 * @return ArrayList<String> 
 	 */
-	public ArrayList<String> checkProcessAssertions(String processName) {
+	/*private ArrayList<String> checkProcessAssertions(String processName) {
 		ArrayList<String> result = new ArrayList<>();
 		
 		// criar os 3 métodos
@@ -48,52 +50,11 @@ public class FDRServices {
 		
 		return result;
 	}
+	*/
+	
 	// necessários deadlock, livelock e deterministic 
-	//TODO:  livelock
 	
-	public String checkDeadlockFree(String processName) {
-		// :[deadlock free [FD]]
-		String assertString = processName+ " " + ":[deadlock free [FD]]";
-		
-		Assertion deadlockAssert = getAssertion(assertString);
-		String result = null;
-		if(deadlockAssert != null) {
-			 result = "Deadlock: " + (deadlockAssert.passed() ? "Passed" : "Failed");
-		}
-		
-		
-		return result;
-	}
-	
-	public String checkDivergenceFree(String processName) {
-		// :[divergence free [FD]]
-		String assertString = processName+ " " + ":[divergence free [FD]]";
-		
-		Assertion divergenceAssert = getAssertion(assertString);
-		
-		String result = null;
-		if(divergenceAssert != null) {
-			result = "Divergence: " + (divergenceAssert.passed() ? "Passed" : "Failed");
-		}
-		
-		
-		return result;
-	}
-	
-	public String checkDeterministic(String processName) {
-		//assert P :[deterministic]
-		String assertString = processName + " " + ":[deterministic [FD]]";
-		
-		Assertion deterministicAssert = getAssertion(assertString);
-		String result = null;
-		if(deterministicAssert != null ) {
-			result = "Deterministic: " + (deterministicAssert.passed() ? "Passed" : "Failed");
-		}
-		
-		return result;
-	}
-	
-	private Assertion getAssertion(String assertion) {
+	protected Assertion getAssertion(String assertion) {
 		try {
 			Assertion newAssertion = session.parseAssertion(assertion).result();
 			newAssertion.execute(null);
@@ -103,4 +64,66 @@ public class FDRServices {
 		}
 		
 	}
+	
+	protected void describeCounterexample(Assertion assertion,ArrayList<String> list) {
+		for (Counterexample counterexample : assertion.counterexamples()) {
+			
+			DebugContext debugContext = null;
+
+			if (counterexample instanceof RefinementCounterexample)
+				debugContext = new DebugContext((RefinementCounterexample) counterexample, false);
+			else if (counterexample instanceof PropertyCounterexample)
+				debugContext = new DebugContext((PropertyCounterexample) counterexample, false);
+			
+			debugContext.initialise(null);
+			Behaviour root = debugContext.rootBehaviours().get(0);
+			describeBehaviour(debugContext, root, list);
+		}
+	}
+	
+	private void describeBehaviour(DebugContext debugContext,
+			Behaviour behaviour, ArrayList<String> list) {
+	
+		for (Long event : behaviour.trace()) {
+			// INVALIDEVENT indiciates that this machine did not perform an event at
+			// the specified index (i.e. it was not synchronised with the machines
+			// that actually did perform the event).
+			if (event == fdr.INVALIDEVENT) {
+				list.add("-");
+			} else if(session.uncompileEvent(event).toString().equals("?")) {
+				list.add("?");
+			} else {
+				list.add(session.uncompileEvent(event).toString());
+			}
+				
+		}
+		/*
+		 if (recurse) {
+			for (Behaviour child : debugContext.behaviourChildren(behaviour))
+				describeBehaviour(debugContext, child, indent + 2, true);
+		} 
+		*/
+	}
+	
+	public boolean checkAssertion(String assertionText) {
+		Assertion assertion = getAssertion(assertionText);
+		Boolean result = null;
+		if(assertion != null ) {
+			result = assertion.passed();
+		}
+		
+		return result;
+	}
+	
+	public String[] getCounterExamples(String assertionText) {
+
+		Assertion assertion = getAssertion(assertionText);
+		
+		ArrayList<String> listCounterExample = new ArrayList<>();
+		
+		describeCounterexample(assertion, listCounterExample);
+		
+		return listCounterExample.toArray(new String[1]);
+	}
+	
 }

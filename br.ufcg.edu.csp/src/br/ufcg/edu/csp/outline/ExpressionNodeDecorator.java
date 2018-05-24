@@ -1,13 +1,15 @@
 package br.ufcg.edu.csp.outline;
 
 import org.antlr.v4.runtime.tree.ParseTree;
+import org.antlr.v4.runtime.tree.TerminalNodeImpl;
 
-public class ExpressionNodeDecorator {
+import br.ufcg.edu.csp.utils.INodeDecorator;
+
+public class ExpressionNodeDecorator implements INodeDecorator{
 
 	private ParseTree node;
 
 	public ExpressionNodeDecorator(ParseTree node) {
-		super();
 		this.node = node;
 	}
 
@@ -27,12 +29,16 @@ public class ExpressionNodeDecorator {
 		return null;
 	}
 	
-	// TODO: FAZER METODO TOSTRING
+	public boolean hasChildren() {
+		return this.node.getChildCount() > 1;
+	}
+	
 	@Override
 	public String toString() {
-		StringBuilder retorno = new StringBuilder();
-		
-		retorno.append(node.getText());
-		return retorno.toString();
+		if(node instanceof TerminalNodeImpl) {
+			return node.getText();
+		} else {
+			return node.getChild(0).getText();
+		}
 	}
 }

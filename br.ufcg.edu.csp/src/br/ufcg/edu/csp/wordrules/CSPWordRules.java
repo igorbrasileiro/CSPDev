@@ -15,7 +15,6 @@ import org.eclipse.swt.SWT;
 public class CSPWordRules extends RuleBasedScanner {
 	private IToken wordTokenBold;
 	private IToken wordTokenUnbold;
-	private Token defaultToken;
 	
 	
 	public CSPWordRules(ColorManager colorManager) {
@@ -37,7 +36,6 @@ public class CSPWordRules extends RuleBasedScanner {
 	private void startTokens(ColorManager colorManager) {
 		this.wordTokenBold = new Token(new TextAttribute(colorManager.getColor(ICSPColorConstants.CSP_RESERVED_WORDS_GREEN),null, SWT.BOLD));
 		this.wordTokenUnbold = new Token(new TextAttribute(colorManager.getColor(ICSPColorConstants.CSP_RESERVED_WORDS_GREEN)));
-		this.defaultToken = new Token(new TextAttribute(colorManager.getColor(ICSPColorConstants.DEFAULT)));
 	}
 	
 	private void addWords(ArrayList<IRule> list) {

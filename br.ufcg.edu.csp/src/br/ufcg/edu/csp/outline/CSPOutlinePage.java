@@ -3,8 +3,10 @@ package br.ufcg.edu.csp.outline;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.StructuredViewer;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.views.contentoutline.ContentOutlinePage;
+
+import br.ufcg.edu.csp.utils.CSPViewsContentProvider;
+import br.ufcg.edu.csp.utils.ExpressionNodeFactory;
 
 
 public class CSPOutlinePage extends ContentOutlinePage {
@@ -13,34 +15,23 @@ public class CSPOutlinePage extends ContentOutlinePage {
 
 	public CSPOutlinePage() { }
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public void createControl(Composite parent) {
 		super.createControl(parent);
 		viewer= getTreeViewer();
-		viewer.setContentProvider(new CSPOutlineContentProvider());
+		viewer.setContentProvider(new CSPViewsContentProvider<ExpressionNodeDecorator>(new ExpressionNodeFactory()));
 		viewer.setLabelProvider(new LabelProvider());
 		viewer.addSelectionChangedListener(this);
-		viewer.setInput((((CSPOutlineContentProvider) viewer.getContentProvider()).getRootContext()));
+		viewer.setInput((((CSPViewsContentProvider<ExpressionNodeDecorator>) viewer.getContentProvider()).getTree()));
 	}
 
+	@SuppressWarnings("unchecked")
 	public void updateContent(){
-		viewer= getTreeViewer();
-		viewer.setContentProvider(new CSPOutlineContentProvider());
-		viewer.setLabelProvider(new LabelProvider());
-		viewer.addSelectionChangedListener(this);
-		viewer.setInput((((CSPOutlineContentProvider) viewer.getContentProvider()).getRootContext()));
+		//viewer= getTreeViewer();
+		//viewer.setContentProvider(new CSPOutlineContentProvider());
+		//viewer.setLabelProvider(new LabelProvider());
+		//viewer.addSelectionChangedListener(this);
+		viewer.setInput((((CSPViewsContentProvider<ExpressionNodeDecorator>) viewer.getContentProvider()).getTree()));
 	}
-
-
-	public void refreshTree() {
-		Display.getDefault().asyncExec(new Runnable() {
-
-
-			public void run() {
-				viewer.refresh();
-			}
-
-		});
-	}
-
 }

@@ -80,7 +80,6 @@ public class ReportErrorMarker {
 		try {
 			file.findMarkers(IMarker.PROBLEM, true, IResource.DEPTH_ZERO);
 		} catch (CoreException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		deleteMarkers(file);

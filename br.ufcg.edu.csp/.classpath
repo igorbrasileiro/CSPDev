@@ -1,10 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry exported="true" kind="lib" path="fdr.jar"/>
-	<classpathentry exported="true" kind="lib" path="antlr4-4.7.1-SNAPSHOT-complete.jar"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8"/>
+	<classpathentry exported="true" kind="lib" path="libs/jettyjars/jetty-http-9.4.10.v20180503.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/jettyjars/jetty-io-9.4.10.v20180503.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/jettyjars/jetty-server-9.4.10.v20180503.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/jettyjars/jetty-util-9.4.10.v20180503.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/jettyjars/servlet-api-3.1.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/jettyjars/start.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/antlr4-4.7.1-SNAPSHOT-complete.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/CSPGraphviz.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/fdr.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8">
+		<attributes>
+			<attribute name="module" value="true"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
 	<classpathentry kind="src" path="src"/>
-	<classpathentry exported="true" kind="lib" path="/opt/fdr/lib/fdr.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

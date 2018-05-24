@@ -26,6 +26,7 @@ import org.eclipse.ui.texteditor.AbstractTextEditor;
 import org.eclipse.ui.texteditor.IDocumentProvider;
 import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
 
+import br.ufcg.edu.csp.counterexampleView.ProcessCheckerListView;
 import br.ufcg.edu.csp.errorReport.ReportErrorMarker;
 import br.ufcg.edu.csp.outline.CSPOutlinePage;
 
@@ -33,9 +34,10 @@ import br.ufcg.edu.csp.outline.CSPOutlinePage;
 public class CSPDocumentProvider extends FileDocumentProvider implements IDocumentListener {
 
 	private ReportErrorMarker errorReport;
-
+	
 	public CSPDocumentProvider() {
 		errorReport = ReportErrorMarker.getInstance();
+		//TODO: remover isto aqui adicionar IDocumentListner a errorReport
 	}
 	
 	@Override
@@ -63,14 +65,26 @@ public class CSPDocumentProvider extends FileDocumentProvider implements IDocume
 		errorReport.cleanErrorList();
 		
 		updateOutlineView();
+		updateProcessCheckerListView();
 		
 		errorReport.reportError();
+		
 	}
 	
+	private void updateProcessCheckerListView() {
+		ProcessCheckerListView pclv = (ProcessCheckerListView) PlatformUI.getWorkbench().
+				getActiveWorkbenchWindow().getActivePage().
+					findView("br.ufcg.edu.csp.processcheckerview");
+		if(pclv != null) {
+			pclv.updateContent();
+		}
+	}
+
 	public void updateOutlineView() {
 		IWorkbenchPart part = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActivePart();
 		CSPOutlinePage outlinePage = (CSPOutlinePage) Adapters.adapt(part, IContentOutlinePage.class);// aqui faz o parse 
-		outlinePage.updateContent();
+		if(outlinePage != null)
+			outlinePage.updateContent();
 	}
 	
 	public static File getEditorFile() {
@@ -81,6 +95,13 @@ public class CSPDocumentProvider extends FileDocumentProvider implements IDocume
 		return null;
 	}
 	
+	
+	private static void saveEditorFile() {
+		IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+		IEditorPart editor = page.getActiveEditor();
+		page.saveEditor(editor, true /* confirm */);
+	}
+
 	public static IResource getEditorIFile() {
 		IWorkbench iworkbench = PlatformUI.getWorkbench();
 

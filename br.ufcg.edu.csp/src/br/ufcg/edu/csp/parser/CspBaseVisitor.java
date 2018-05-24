@@ -1,6 +1,6 @@
-// Generated from Csp.g4 by ANTLR 4.4
 package br.ufcg.edu.csp.parser;
-import org.antlr.v4.runtime.misc.NotNull;
+
+// Generated from Csp.g4 by ANTLR 4.7
 import org.antlr.v4.runtime.tree.AbstractParseTreeVisitor;
 
 /**
@@ -18,124 +18,165 @@ public class CspBaseVisitor<T> extends AbstractParseTreeVisitor<T> implements Cs
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitChannelDecl(@NotNull CspParser.ChannelDeclContext ctx) { return visitChildren(ctx); }
+	@Override public T visitSpec(CspParser.SpecContext ctx) { return visitChildren(ctx); }
+
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitProc(@NotNull CspParser.ProcContext ctx) { return visitChildren(ctx); }
+	@Override public T visitDefinition(CspParser.DefinitionContext ctx) { return visitChildren(ctx); }
+
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitSet(@NotNull CspParser.SetContext ctx) { return visitChildren(ctx); }
+	@Override public T visitChannelDecl(CspParser.ChannelDeclContext ctx) { return visitChildren(ctx); }
+
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitDefinitionLeft(@NotNull CspParser.DefinitionLeftContext ctx) { return visitChildren(ctx); }
+	@Override public T visitChannelNames(CspParser.ChannelNamesContext ctx) { return visitChildren(ctx); }
+
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitBoolExp(@NotNull CspParser.BoolExpContext ctx) { return visitChildren(ctx); }
+	@Override public T visitChannelColonType(CspParser.ChannelColonTypeContext ctx) { return visitChildren(ctx); }
+
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitSimple(@NotNull CspParser.SimpleContext ctx) { return visitChildren(ctx); }
+	@Override public T visitSimpleDefinition(CspParser.SimpleDefinitionContext ctx) { return visitChildren(ctx); }
+
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitSimpleDefinition(@NotNull CspParser.SimpleDefinitionContext ctx) { return visitChildren(ctx); }
+	@Override public T visitAssertDefinition(CspParser.AssertDefinitionContext ctx) { return visitChildren(ctx); }
+
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitBoolOrAmb(@NotNull CspParser.BoolOrAmbContext ctx) { return visitChildren(ctx); }
+	@Override public T visitDefinitionLeft(CspParser.DefinitionLeftContext ctx) { return visitChildren(ctx); }
+
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitChannelColonType(@NotNull CspParser.ChannelColonTypeContext ctx) { return visitChildren(ctx); }
+	@Override public T visitDefnCallLeft(CspParser.DefnCallLeftContext ctx) { return visitChildren(ctx); }
+
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitType(@NotNull CspParser.TypeContext ctx) { return visitChildren(ctx); }
+	@Override public T visitAny(CspParser.AnyContext ctx) { return visitChildren(ctx); }
+
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitAny(@NotNull CspParser.AnyContext ctx) { return visitChildren(ctx); }
+	@Override public T visitCheckConditionBody(CspParser.CheckConditionBodyContext ctx) { return visitChildren(ctx); }
+
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitSpec(@NotNull CspParser.SpecContext ctx) { return visitChildren(ctx); }
+	@Override public T visitModelCheckType(CspParser.ModelCheckTypeContext ctx) { return visitChildren(ctx); }
+
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitNumber(@NotNull CspParser.NumberContext ctx) { return visitChildren(ctx); }
+	@Override public T visitType(CspParser.TypeContext ctx) { return visitChildren(ctx); }
+
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitChannelNames(@NotNull CspParser.ChannelNamesContext ctx) { return visitChildren(ctx); }
+	@Override public T visitSimple(CspParser.SimpleContext ctx) { return visitChildren(ctx); }
+
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitDefnCallLeft(@NotNull CspParser.DefnCallLeftContext ctx) { return visitChildren(ctx); }
+	@Override public T visitSet(CspParser.SetContext ctx) { return visitChildren(ctx); }
+
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitDefinition(@NotNull CspParser.DefinitionContext ctx) { return visitChildren(ctx); }
+	@Override public T visitProc(CspParser.ProcContext ctx) { return visitChildren(ctx); }
+
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitExpr(@NotNull CspParser.ExprContext ctx) { return visitChildren(ctx); }
+	@Override public T visitBoolExp(CspParser.BoolExpContext ctx) { return visitChildren(ctx); }
+
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitComment(@NotNull CspParser.CommentContext ctx) { return visitChildren(ctx); }
+	@Override public T visitBoolOrAmb(CspParser.BoolOrAmbContext ctx) { return visitChildren(ctx); }
+
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.</p>
+	 */
+	@Override public T visitExpr(CspParser.ExprContext ctx) { return visitChildren(ctx); }
+
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.</p>
+	 */
+	@Override public T visitNumber(CspParser.NumberContext ctx) { return visitChildren(ctx); }
+
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.</p>
+	 */
+	@Override public T visitComment(CspParser.CommentContext ctx) { return visitChildren(ctx); }
 }

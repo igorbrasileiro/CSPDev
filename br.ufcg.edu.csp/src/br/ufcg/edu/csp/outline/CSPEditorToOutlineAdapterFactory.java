@@ -3,13 +3,14 @@ package br.ufcg.edu.csp.outline;
 import org.eclipse.core.runtime.IAdapterFactory;
 import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
 
+
 public class CSPEditorToOutlineAdapterFactory implements IAdapterFactory {
 
 	private CSPOutlinePage myPage;
 
 	@Override
 	public Class<?>[] getAdapterList() {
-		return new Class<?>[] { IContentOutlinePage.class };
+		return new Class<?>[] { IContentOutlinePage.class};
 	}
 
 	@SuppressWarnings("unchecked")
@@ -21,7 +22,7 @@ public class CSPEditorToOutlineAdapterFactory implements IAdapterFactory {
 			}
 			
 			return (T) myPage;
-		} 
+		}
 
 		return null;
 	}
