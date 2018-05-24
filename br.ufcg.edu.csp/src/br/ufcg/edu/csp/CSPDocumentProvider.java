@@ -95,6 +95,13 @@ public class CSPDocumentProvider extends FileDocumentProvider implements IDocume
 		return null;
 	}
 	
+	
+	private static void saveEditorFile() {
+		IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+		IEditorPart editor = page.getActiveEditor();
+		page.saveEditor(editor, true /* confirm */);
+	}
+
 	public static IResource getEditorIFile() {
 		IWorkbench iworkbench = PlatformUI.getWorkbench();
 

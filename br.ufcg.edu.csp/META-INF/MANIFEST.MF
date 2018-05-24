@@ -12,12 +12,12 @@ Require-Bundle: org.eclipse.ui.editors;bundle-version="3.11.0",
  org.eclipse.ui.views;bundle-version="3.9.0",
  org.eclipse.ui.workbench
 Bundle-ClassPath: .,
+ libs/antlr4-4.7.1-SNAPSHOT-complete.jar,
+ libs/CSPGraphviz.jar,
+ libs/fdr.jar,
  libs/jettyjars/jetty-http-9.4.10.v20180503.jar,
  libs/jettyjars/jetty-io-9.4.10.v20180503.jar,
  libs/jettyjars/jetty-server-9.4.10.v20180503.jar,
  libs/jettyjars/jetty-util-9.4.10.v20180503.jar,
  libs/jettyjars/servlet-api-3.1.jar,
- libs/jettyjars/start.jar,
- libs/antlr4-4.7.1-SNAPSHOT-complete.jar,
- libs/fdr.jar,
- libs/GraphCreator.jar
+ libs/jettyjars/start.jar
