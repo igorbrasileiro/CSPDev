@@ -18,6 +18,7 @@ import org.eclipse.ui.part.ViewPart;
 
 import br.ufcg.edu.csp.CSPDocumentProvider;
 import graphvizJavaPloting.GraphvizJava;
+import br.ufcg.edu.csp.jetty.FileServer;
 
 
 public class CounterexampleListView extends ViewPart {
@@ -27,6 +28,7 @@ public class CounterexampleListView extends ViewPart {
 	private Action doubleClickAction;
 	private String projectFilePath;
 	private GraphvizJava cgs;
+	FileServer fileServer;
 	
 	@Override
 	public void createPartControl(Composite parent) {
@@ -80,12 +82,16 @@ public class CounterexampleListView extends ViewPart {
 			// trocar instancia caso queira um único browser
 			IWebBrowser browser = support.createBrowser(IWorkbenchBrowserSupport.AS_EDITOR, null, "CSP Editor", "Checker counterexample");
 			
-			URL urlFile = createCounterExamplesFiles(nodes);
+			String htmlPagePath = createCounterExamplesFiles(nodes);
+			String directory = createOutputDirectory();
 			
+			startServer(directory, htmlPagePath);
 			//System.out.println(file);
 			//System.out.println(urlFile);
 			
-			browser.openURL(urlFile);
+			URL localHost = new URL("http://localhost:8080/"+htmlPagePath);
+			
+			browser.openURL(localHost);
 			
 		} catch (Exception ceb) {
 			ceb.printStackTrace();
@@ -94,19 +100,32 @@ public class CounterexampleListView extends ViewPart {
 		
 	}
 	
-	private URL createCounterExamplesFiles(String[] nodes) throws IOException {
+	public void startServer(String directory, String htmlPagePath) {
+		if(fileServer == null) {
+			FileServer fileServer = new FileServer(directory,htmlPagePath);
+			fileServer.startServer();
+		}
+	}
+	
+	private String createCounterExamplesFiles(String[] nodes) throws IOException {
 		if(projectFilePath == null)
 			projectFilePath = CSPDocumentProvider.getEditorFile().getParentFile().getAbsolutePath();
-
-		File f = new File(projectFilePath+"/Outputs");
-		f.mkdir();
 		
-		URL filePath = createHtmlPage(nodes);
+		String filePath = createHtmlPage(nodes);
 		
 		return filePath;
 	}
+
+	private String createOutputDirectory() {
+		File f = new File(projectFilePath+"/Outputs");
+		if(!f.exists()) {
+			f.mkdir();
+		}
+		
+		return f.getPath();
+	}
 	
-	private URL createHtmlPage(String[] nodes) throws IOException {
+	private String createHtmlPage(String[] nodes) throws IOException {
 		String htmlGraphVar = "var graph = " + cgs.ploting(nodes) + "\n";
 		
 		File file = new File(projectFilePath+"/Outputs/counterExamplePage.html");
@@ -122,7 +141,8 @@ public class CounterexampleListView extends ViewPart {
 		buffWrite.append(getHtmlSecondPart());
 		buffWrite.close();
 		
-		return file.toURI().toURL();
+		//return file.toURI().toURL();
+		return "counterExamplePage.html";
 	}
 
 	public String getHtmlFirstPart() {
