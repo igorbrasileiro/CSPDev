@@ -7,4 +7,6 @@ public interface INodeDecorator {
 	public ParseTree getNode();
 	
 	public void setNode(ParseTree node);
+	
+	public INodeDecorator getParent();
 }

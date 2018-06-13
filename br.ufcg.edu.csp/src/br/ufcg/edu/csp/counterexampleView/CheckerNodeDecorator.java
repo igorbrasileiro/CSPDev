@@ -111,4 +111,9 @@ public class CheckerNodeDecorator implements INodeDecorator {
 		
 		return text;
 	}
+
+	@Override
+	public INodeDecorator getParent() {
+		return new CheckerNodeDecorator(this.node.getParent());
+	}
 }

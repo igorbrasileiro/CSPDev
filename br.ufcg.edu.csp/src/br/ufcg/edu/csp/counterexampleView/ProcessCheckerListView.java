@@ -197,13 +197,15 @@ public class ProcessCheckerListView extends ViewPart implements IDocumentListene
 		Object obj = selection.getFirstElement();
 		
 		if(obj instanceof CheckerNodeDecorator
-				&& ((CheckerNodeDecorator) obj).getNode() instanceof CspParser.AssertDefinitionContext) {
-			FDRServices checker = new FDRServices(getEditorFileName());
-			CheckerNodeDecorator node = ((CheckerNodeDecorator) obj);			
+				&& ((CheckerNodeDecorator) obj).getNode() instanceof CspParser.AssertDefinitionContext) {		
 			
 			try {
-				String assertString = node.toString().substring(6);
+				FDRServices checker = new FDRServices(getEditorFileName());
+				CheckerNodeDecorator node = ((CheckerNodeDecorator) obj);	
+				
+				String assertString = node.toString().substring(6); // length to remove assert token
 				boolean checkCondition = checker.checkAssertion(assertString);
+				
 				node.setAssertionText(assertString);
 				node.setCheckCondition(checkCondition);
 				
