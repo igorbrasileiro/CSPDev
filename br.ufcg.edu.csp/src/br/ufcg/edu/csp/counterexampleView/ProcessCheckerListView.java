@@ -50,7 +50,6 @@ public class ProcessCheckerListView extends ViewPart implements IDocumentListene
 	@Override
 	public void createPartControl(Composite parent) {
 		// ISelectionChangedListner
-		//TODO qual melhor? assim add document listner ou la no document provider?
 		//addDocumentListner();
 
 		viewer = new TableViewer(parent, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL);
@@ -142,19 +141,21 @@ public class ProcessCheckerListView extends ViewPart implements IDocumentListene
 		IStructuredSelection selection = viewer.getStructuredSelection();
 		Object obj = selection.getFirstElement();
 		if(obj instanceof CheckerNodeDecorator) {
-			// TODO: fazer verificação se nó tinha condicao falsa e agora é true e remover ele da lista
-			
 			CheckerNodeDecorator node = (CheckerNodeDecorator) obj;
-			boolean checkCondition = checker.checkProcess(node.getNodeName()); // capturar um boolean
-			node.setAssertionText(checker.getAssertionText(node.getNodeName()));
-			node.setCheckCondition(checkCondition);
-			
-			if(!node.getCheckCondition()) {
-				String[] nodeCounterexamples = checker.getCounterExamples(node.getNodeName());
-				node.setCounterexamples(nodeCounterexamples);
+			try {
+				boolean checkCondition = checker.checkProcess(node.getNodeName()); // capturar um boolean
+				node.setAssertionText(checker.getAssertionText(node.getNodeName()));
+				node.setCheckCondition(checkCondition);
+				
+				if(!node.getCheckCondition()) {
+					String[] nodeCounterexamples = checker.getCounterExamples(node.getNodeName());
+					node.setCounterexamples(nodeCounterexamples);
+				}
+				
+				updateCheckerNodeList(node);
+			} catch (NullPointerException e) {
+				//TODO CAPTURAR O ERRO E IMPRIMIR
 			}
-			
-			updateCheckerNodeList(node);
 		}
 	}
 
@@ -198,21 +199,23 @@ public class ProcessCheckerListView extends ViewPart implements IDocumentListene
 		if(obj instanceof CheckerNodeDecorator
 				&& ((CheckerNodeDecorator) obj).getNode() instanceof CspParser.AssertDefinitionContext) {
 			FDRServices checker = new FDRServices(getEditorFileName());
-			CheckerNodeDecorator node = ((CheckerNodeDecorator) obj);
-			ParseTree tnode = node.getNode();
+			CheckerNodeDecorator node = ((CheckerNodeDecorator) obj);			
 			
-			String assertString = tnode.getText().substring(6);
-			boolean checkCondition = checker.checkAssertion(assertString);
-		
-			node.setAssertionText(assertString);
-			node.setCheckCondition(checkCondition);
-			
-			if(!node.getCheckCondition()) {
-				String[] nodeCounterexamples = checker.getCounterExamples(assertString);
-				node.setCounterexamples(nodeCounterexamples);
+			try {
+				String assertString = node.toString().substring(6);
+				boolean checkCondition = checker.checkAssertion(assertString);
+				node.setAssertionText(assertString);
+				node.setCheckCondition(checkCondition);
+				
+				if(!node.getCheckCondition()) {
+					String[] nodeCounterexamples = checker.getCounterExamples(assertString);
+					node.setCounterexamples(nodeCounterexamples);
+				}
+				
+				updateCheckerNodeList(node);
+			} catch (NullPointerException e) {
+				//TODO ABRIR UM DIALOG MANDANDO CORRIGIR
 			}
-			
-			updateCheckerNodeList(node);
 		}
 		
 	}

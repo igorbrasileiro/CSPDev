@@ -7,7 +7,6 @@ import br.ufcg.edu.csp.CSPEditor;
 public class CSPEditorActivator extends AbstractUIPlugin {
 
 	public CSPEditorActivator() {
-		// TODO Auto-generated constructor stub
 	}
 
 	

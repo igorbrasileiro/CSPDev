@@ -11,19 +11,16 @@ public class CounterexampleContentProvider implements ITreeContentProvider {
 
 	@Override
 	public Object[] getChildren(Object parentElement) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public Object getParent(Object element) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public boolean hasChildren(Object element) {
-		// TODO Auto-generated method stub
 		return false;
 	}
 }
