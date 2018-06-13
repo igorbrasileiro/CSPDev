@@ -1,4 +1,4 @@
-# Editor-CSP
+# CSPDev
 An IDE for [CSP](https://en.wikipedia.org/wiki/Communicating_sequential_processes) integrated with FDR tool.  
 [PT-BR] Uma IDE para [CSP](https://pt.wikipedia.org/wiki/CSP) integrada a ferramenta FDR.
 
