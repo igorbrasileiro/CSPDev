@@ -105,6 +105,8 @@ public class CounterexampleListView extends ViewPart {
 			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
+		} catch (Exception e) {
+			// do nothing, just to catch others exceptions!
 		}
 		
 	}
