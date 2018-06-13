@@ -90,9 +90,7 @@ public class CheckerNodeDecorator implements INodeDecorator {
 	@Override
 	public String toString() {
 		String text;
-		if(isCounterexampleNode) {
-			text =  getAssertionText();
-		} else if(node instanceof CspParser.AssertDefinitionContext) {
+		if(node instanceof CspParser.AssertDefinitionContext) {
 			StringBuilder sb = new StringBuilder();
 			for (int i = 0; i < node.getChildCount(); i++) {
 				String substring = node.getChild(i).getText();
@@ -105,6 +103,8 @@ public class CheckerNodeDecorator implements INodeDecorator {
 				}
 			}
 			text = sb.toString();
+		} else if(isCounterexampleNode) {
+			text = getAssertionText();
 		} else {
 			text =  getNodeName();
 		}
