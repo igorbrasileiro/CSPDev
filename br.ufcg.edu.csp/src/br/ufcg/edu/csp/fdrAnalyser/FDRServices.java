@@ -15,6 +15,12 @@ public class FDRServices {
 
 	protected Session session;
 
+	/**
+	 * Constructor that receive fileName and start a new FDR Session and load this file.
+	 * @param fileName 
+	 * string of path of desired file
+	 *
+	 */
 	public FDRServices(String fileName) {
 		session = new Session();
 		

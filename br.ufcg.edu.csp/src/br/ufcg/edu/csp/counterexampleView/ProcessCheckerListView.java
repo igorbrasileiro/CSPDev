@@ -99,8 +99,12 @@ public class ProcessCheckerListView extends ViewPart implements IDocumentListene
 		if(cspFileName != null) {
 			determinismChecker = new Action() {
 				public void run() {
-					FDRChecker checker = new DeterministicChecker(cspFileName);
-					checkNode(checker);
+					try{ 
+						FDRChecker checker = new DeterministicChecker(cspFileName);
+						checkNode(checker);
+					} catch (RuntimeException re) {
+						// TODO show dialog
+					}
 				}
 			};
 
@@ -109,8 +113,13 @@ public class ProcessCheckerListView extends ViewPart implements IDocumentListene
 
 			deadlockChecker = new Action() {
 				public void run() {
-					FDRChecker checker = new DeadlockChecker(cspFileName);
-					checkNode(checker);
+					try{
+						FDRChecker checker = new DeadlockChecker(cspFileName);
+						checkNode(checker);
+					} catch (RuntimeException re) {
+						// TODO show dialog
+					}
+					
 				}
 			};
 
@@ -119,8 +128,12 @@ public class ProcessCheckerListView extends ViewPart implements IDocumentListene
 
 			divergenceChecker = new Action() {
 				public void run() {
-					FDRChecker checker = new DivergenceChecker(cspFileName);
-					checkNode(checker);
+					try {
+						FDRChecker checker = new DivergenceChecker(cspFileName);
+						checkNode(checker);
+					} catch (RuntimeException re) {
+						// TODO show dialog
+					}
 				}
 			};
 
