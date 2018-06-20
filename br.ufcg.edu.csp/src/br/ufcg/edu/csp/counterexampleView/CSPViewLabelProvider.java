@@ -27,11 +27,11 @@ public class CSPViewLabelProvider  extends LabelProvider implements ITableLabelP
 	public Image getImage(Object obj) {
 		if(tick == null || crossTick == null) {
 			try {
-				File file = new File("editor-csp\\br.ufcg.edu.csp\\icons\\tick.png");
+				File file = new File("CSPDev\\br.ufcg.edu.csp\\icons\\tick.png");
 				ImageDescriptor imageDescriptor = ImageDescriptor.createFromURL(file.toURI().toURL());
 				tick = imageDescriptor.createImage();
 				
-				file = new File("editor-csp\\br.ufcg.edu.csp\\icons\\cross_tick.png");
+				file = new File("CSPDev\\br.ufcg.edu.csp\\icons\\cross_tick.png");
 				imageDescriptor = ImageDescriptor.createFromURL(file.toURI().toURL());
 				crossTick = imageDescriptor.createImage();
 			} catch (MalformedURLException e) {
