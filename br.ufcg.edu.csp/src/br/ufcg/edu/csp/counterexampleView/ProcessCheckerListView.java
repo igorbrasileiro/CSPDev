@@ -155,6 +155,9 @@ public class ProcessCheckerListView extends ViewPart implements IDocumentListene
 		Object obj = selection.getFirstElement();
 		if(obj instanceof CheckerNodeDecorator) {
 			CheckerNodeDecorator node = (CheckerNodeDecorator) obj;
+			if(checker instanceof DeadlockChecker) {
+				((CheckerNodeDecorator) obj).setIsDeadlock(true);
+			}
 			try {
 				boolean checkCondition = checker.checkProcess(node.getNodeName()); // capturar um boolean
 				node.setAssertionText(checker.getAssertionText(node.getNodeName()));
@@ -211,10 +214,13 @@ public class ProcessCheckerListView extends ViewPart implements IDocumentListene
 		
 		if(obj instanceof CheckerNodeDecorator
 				&& ((CheckerNodeDecorator) obj).getNode() instanceof CspParser.AssertDefinitionContext) {		
+			CheckerNodeDecorator node = ((CheckerNodeDecorator) obj);
 			
+			if(node.getNode().getText().toLowerCase().contains("deadlock")) {
+				node.setIsDeadlock(true);
+			}
 			try {
-				FDRServices checker = new FDRServices(getEditorFileName());
-				CheckerNodeDecorator node = ((CheckerNodeDecorator) obj);	
+				FDRServices checker = new FDRServices(getEditorFileName());	
 				
 				String assertString = node.toString().substring(6); // length to remove assert token
 				boolean checkCondition = checker.checkAssertion(assertString);

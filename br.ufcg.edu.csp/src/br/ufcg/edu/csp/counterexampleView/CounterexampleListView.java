@@ -68,7 +68,7 @@ public class CounterexampleListView extends ViewPart {
 				//System.out.println("Double-click detected on "+obj.toString());
 				if(obj instanceof CheckerNodeDecorator 
 						&& !((CheckerNodeDecorator)obj).getCheckCondition()) {
-					openCounterexampleBrowser(((CheckerNodeDecorator) obj).getCounterexamples());
+					openCounterexampleBrowser(((CheckerNodeDecorator) obj).getCounterexamples(), ((CheckerNodeDecorator)obj).isDeadlockCounterexample());
 				}
 				
 			}
@@ -79,14 +79,14 @@ public class CounterexampleListView extends ViewPart {
 		viewer.addDoubleClickListener(o -> doubleClickAction.run());
 	}
 	
-	private void openCounterexampleBrowser(String[] nodes) {
+	private void openCounterexampleBrowser(String[] nodes, boolean isDeadlock) {
 		try{
 			IWorkbenchBrowserSupport support = PlatformUI.getWorkbench().getBrowserSupport();
 			// trocar instancia caso queira um único browser
 			IWebBrowser browser = support.createBrowser(IWorkbenchBrowserSupport.AS_EDITOR, null, "CSP Editor", "Checker counterexample");
 			
 			createCounterExamplesFiles();
-			cgs.ploting(nodes);
+			cgs.ploting(nodes,isDeadlock);
 			
 			startServer(projectFilePath+directory, htmlPage);
 			//System.out.println(file);

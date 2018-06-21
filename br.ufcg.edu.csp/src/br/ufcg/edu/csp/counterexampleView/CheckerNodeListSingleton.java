@@ -29,12 +29,14 @@ public class CheckerNodeListSingleton {
 			existentNode.setCounterexamples(node.getCounterexamples());
 			existentNode.setNode(node.getNode());
 			existentNode.setAssertionText(node.getAssertionText());
+			existentNode.setIsDeadlock(node.isDeadlockCounterexample());
 		} else if(!list.contains(node)) {
 			CheckerNodeDecorator newNode = new CheckerNodeDecorator(node.getNode());
 			newNode.setNodeAsCounterexampleNode();
 			newNode.setCheckCondition(node.getCheckCondition());
 			newNode.setCounterexamples(node.getCounterexamples());
 			newNode.setAssertionText(node.getAssertionText());
+			newNode.setIsDeadlock(node.isDeadlockCounterexample());
 			list.add(newNode);
 		}
 		updateCounterexampleListView();

@@ -10,7 +10,7 @@ import br.ufcg.edu.csp.utils.INodeDecorator;
 public class CheckerNodeDecorator implements INodeDecorator {
 	
 	private boolean isCounterexampleNode;
-	
+	private boolean isDeadlock;
 	private ParseTree node;
 	private boolean checkCondition;
 	private String[] counterexamples;
@@ -24,6 +24,7 @@ public class CheckerNodeDecorator implements INodeDecorator {
 		this.checkCondition = false;
 		this.isCounterexampleNode = false;
 		this.assertionText = "";
+		this.isDeadlock = false;
 		createEspecialChars();
 	}
 
@@ -115,5 +116,13 @@ public class CheckerNodeDecorator implements INodeDecorator {
 	@Override
 	public INodeDecorator getParent() {
 		return new CheckerNodeDecorator(this.node.getParent());
+	}
+	
+	public void setIsDeadlock(boolean isDeadlock) {
+		this.isDeadlock = isDeadlock;
+	}
+	
+	protected boolean isDeadlockCounterexample() {
+		return isDeadlock;
 	}
 }
