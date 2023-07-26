@@ -4,6 +4,7 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URL;
 
 import org.eclipse.jface.action.Action;
@@ -11,6 +12,7 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.browser.IWebBrowser;
 import org.eclipse.ui.browser.IWorkbenchBrowserSupport;
@@ -66,7 +68,7 @@ public class CounterexampleListView extends ViewPart {
 				//System.out.println("Double-click detected on "+obj.toString());
 				if(obj instanceof CheckerNodeDecorator 
 						&& !((CheckerNodeDecorator)obj).getCheckCondition()) {
-					openCounterexampleBrowser(((CheckerNodeDecorator) obj).getCounterexamples());
+					openCounterexampleBrowser(((CheckerNodeDecorator) obj).getCounterexamples(), ((CheckerNodeDecorator)obj).isDeadlockCounterexample());
 				}
 				
 			}
@@ -77,14 +79,14 @@ public class CounterexampleListView extends ViewPart {
 		viewer.addDoubleClickListener(o -> doubleClickAction.run());
 	}
 	
-	private void openCounterexampleBrowser(String[] nodes) {
+	private void openCounterexampleBrowser(String[] nodes, boolean isDeadlock) {
 		try{
 			IWorkbenchBrowserSupport support = PlatformUI.getWorkbench().getBrowserSupport();
 			// trocar instancia caso queira um único browser
 			IWebBrowser browser = support.createBrowser(IWorkbenchBrowserSupport.AS_EDITOR, null, "CSP Editor", "Checker counterexample");
 			
 			createCounterExamplesFiles();
-			cgs.ploting(nodes);
+			cgs.ploting(nodes,isDeadlock);
 			
 			startServer(projectFilePath+directory, htmlPage);
 			//System.out.println(file);
@@ -94,9 +96,17 @@ public class CounterexampleListView extends ViewPart {
 			
 			browser.openURL(localHost);
 			
-		} catch (Exception ceb) {
+		} catch (NullPointerException ceb) {
 			ceb.printStackTrace();
 			System.out.println("erro counterexample list abrir pagina web");
+		} catch (PartInitException e) {
+			e.printStackTrace();
+		} catch (MalformedURLException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (Exception e) {
+			// do nothing, just to catch others exceptions!
 		}
 		
 	}

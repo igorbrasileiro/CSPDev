@@ -37,7 +37,6 @@ public class CSPDocumentProvider extends FileDocumentProvider implements IDocume
 	
 	public CSPDocumentProvider() {
 		errorReport = ReportErrorMarker.getInstance();
-		//TODO: remover isto aqui adicionar IDocumentListner a errorReport
 	}
 	
 	@Override

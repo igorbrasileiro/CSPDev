@@ -7,6 +7,7 @@ spec
 definition
 	: channelDecl
 	| simpleDefinition
+	| assertDefinition
 	| comment
 	;
 	
@@ -26,6 +27,10 @@ simpleDefinition
 	: definitionLeft EQUAL any 	
 	;
 
+assertDefinition
+	: ASSERT definitionLeft COLLON LBRACKET checkConditionBody RBRACKET
+	;
+	
 definitionLeft
 	: defnCallLeft
 	| defnCallLeft LPAREN any* RPAREN	
@@ -39,6 +44,18 @@ any
 	: proc
 	| boolExp
 	| expr
+	;
+		
+checkConditionBody
+	: DEADLOCK FREE modelCheckType?
+	| DIVERGENCE FREE modelCheckType?
+	| DETERMINISTIC modelCheckType?
+	;
+	
+modelCheckType
+	: FAILUREDIVE
+	| FAILURE
+	| TRACE
 	;
 	
 type
@@ -69,7 +86,8 @@ proc									//TODO: came from rule _proc (try to make union of rules _proc and 
 	| proc TIMEOUT proc						//timeout operator
 	| proc INTR proc						//interrupt operator
 	| proc SEMICOL proc						//sequential composition
-	| ID				//TODO: revise
+	| LPAREN proc RPAREN
+	| ID								//TODO: revise
 	;
 		
 
@@ -132,6 +150,8 @@ FALSE : 'false' ;
 GUARD : '&' ;
 LPAREN : '(' ;
 RPAREN : ')' ;
+LBRACKET: '[';
+RBRACKET: ']';
 LSYNC : '[|' ;
 RSYNC : '|]' ;
 INTL :	'|||';
@@ -151,6 +171,14 @@ EQUAL	: '=';
 BACKSLASH : '\\';
 TIMEOUT	: '[>';
 INTR	: '/\\';
+ASSERT : 'assert';
+DEADLOCK : 'deadlock';
+DETERMINISTIC : 'deterministic';
+DIVERGENCE : 'divergence';
+FAILUREDIVE : ' [FD]';
+FAILURE : ' [F]';
+TRACE: ' [T]';
+FREE: ' free';
 
 
 DIGIT
@@ -164,5 +192,5 @@ LINECOMMENT
     ;
 	
 WS
-   : [ \r\n\t] + -> channel (HIDDEN)
+   : [ \r\n\t]+ -> channel (HIDDEN)
    ;

@@ -50,7 +50,6 @@ public class ProcessCheckerListView extends ViewPart implements IDocumentListene
 	@Override
 	public void createPartControl(Composite parent) {
 		// ISelectionChangedListner
-		//TODO qual melhor? assim add document listner ou la no document provider?
 		//addDocumentListner();
 
 		viewer = new TableViewer(parent, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL);
@@ -100,8 +99,12 @@ public class ProcessCheckerListView extends ViewPart implements IDocumentListene
 		if(cspFileName != null) {
 			determinismChecker = new Action() {
 				public void run() {
-					FDRChecker checker = new DeterministicChecker(cspFileName);
-					checkNode(checker);
+					try{ 
+						FDRChecker checker = new DeterministicChecker(cspFileName);
+						checkNode(checker);
+					} catch (RuntimeException re) {
+						// TODO show dialog
+					}
 				}
 			};
 
@@ -110,8 +113,13 @@ public class ProcessCheckerListView extends ViewPart implements IDocumentListene
 
 			deadlockChecker = new Action() {
 				public void run() {
-					FDRChecker checker = new DeadlockChecker(cspFileName);
-					checkNode(checker);
+					try{
+						FDRChecker checker = new DeadlockChecker(cspFileName);
+						checkNode(checker);
+					} catch (RuntimeException re) {
+						// TODO show dialog
+					}
+					
 				}
 			};
 
@@ -120,8 +128,12 @@ public class ProcessCheckerListView extends ViewPart implements IDocumentListene
 
 			divergenceChecker = new Action() {
 				public void run() {
-					FDRChecker checker = new DivergenceChecker(cspFileName);
-					checkNode(checker);
+					try {
+						FDRChecker checker = new DivergenceChecker(cspFileName);
+						checkNode(checker);
+					} catch (RuntimeException re) {
+						// TODO show dialog
+					}
 				}
 			};
 
@@ -142,19 +154,24 @@ public class ProcessCheckerListView extends ViewPart implements IDocumentListene
 		IStructuredSelection selection = viewer.getStructuredSelection();
 		Object obj = selection.getFirstElement();
 		if(obj instanceof CheckerNodeDecorator) {
-			// TODO: fazer verificação se nó tinha condicao falsa e agora é true e remover ele da lista
-			
 			CheckerNodeDecorator node = (CheckerNodeDecorator) obj;
-			boolean checkCondition = checker.checkProcess(node.getNodeName()); // capturar um boolean
-			node.setAssertionText(checker.getAssertionText(node.getNodeName()));
-			node.setCheckCondition(checkCondition);
-			
-			if(!node.getCheckCondition()) {
-				String[] nodeCounterexamples = checker.getCounterExamples(node.getNodeName());
-				node.setCounterexamples(nodeCounterexamples);
+			if(checker instanceof DeadlockChecker) {
+				((CheckerNodeDecorator) obj).setIsDeadlock(true);
 			}
-			
-			updateCheckerNodeList(node);
+			try {
+				boolean checkCondition = checker.checkProcess(node.getNodeName()); // capturar um boolean
+				node.setAssertionText(checker.getAssertionText(node.getNodeName()));
+				node.setCheckCondition(checkCondition);
+				
+				if(!node.getCheckCondition()) {
+					String[] nodeCounterexamples = checker.getCounterExamples(node.getNodeName());
+					node.setCounterexamples(nodeCounterexamples);
+				}
+				
+				updateCheckerNodeList(node);
+			} catch (NullPointerException e) {
+				//TODO CAPTURAR O ERRO E IMPRIMIR
+			}
 		}
 	}
 
@@ -196,23 +213,30 @@ public class ProcessCheckerListView extends ViewPart implements IDocumentListene
 		Object obj = selection.getFirstElement();
 		
 		if(obj instanceof CheckerNodeDecorator
-				&& ((CheckerNodeDecorator) obj).getNode() instanceof CspParser.AssertDefinitionContext) {
-			FDRServices checker = new FDRServices(getEditorFileName());
+				&& ((CheckerNodeDecorator) obj).getNode() instanceof CspParser.AssertDefinitionContext) {		
 			CheckerNodeDecorator node = ((CheckerNodeDecorator) obj);
-			ParseTree tnode = node.getNode();
 			
-			String assertString = tnode.getText().substring(6);
-			boolean checkCondition = checker.checkAssertion(assertString);
-		
-			node.setAssertionText(assertString);
-			node.setCheckCondition(checkCondition);
-			
-			if(!node.getCheckCondition()) {
-				String[] nodeCounterexamples = checker.getCounterExamples(assertString);
-				node.setCounterexamples(nodeCounterexamples);
+			if(node.getNode().getText().toLowerCase().contains("deadlock")) {
+				node.setIsDeadlock(true);
 			}
-			
-			updateCheckerNodeList(node);
+			try {
+				FDRServices checker = new FDRServices(getEditorFileName());	
+				
+				String assertString = node.toString().substring(6); // length to remove assert token
+				boolean checkCondition = checker.checkAssertion(assertString);
+				
+				node.setAssertionText(assertString);
+				node.setCheckCondition(checkCondition);
+				
+				if(!node.getCheckCondition()) {
+					String[] nodeCounterexamples = checker.getCounterExamples(assertString);
+					node.setCounterexamples(nodeCounterexamples);
+				}
+				
+				updateCheckerNodeList(node);
+			} catch (NullPointerException e) {
+				//TODO ABRIR UM DIALOG MANDANDO CORRIGIR
+			}
 		}
 		
 	}

@@ -84,7 +84,6 @@ public class ParserUtil {
 
 			String lineText = getLineText(doc, docOffset);
 			//			String processName = lineText.split;
-			//TODO IDEIA ter um map, que e preenchido por um visitor, verificar se palavra está dentro do mapa
 			// descer até definitionleft para pegar somente a definição do processo
 			while(offsetInLine >= 0 && Character.isWhitespace(lineText.charAt(offsetInLine))) {
 					offsetInLine--;

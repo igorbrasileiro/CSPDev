@@ -15,6 +15,12 @@ public class FDRServices {
 
 	protected Session session;
 
+	/**
+	 * Constructor that receive fileName and start a new FDR Session and load this file.
+	 * @param fileName 
+	 * string of path of desired file
+	 *
+	 */
 	public FDRServices(String fileName) {
 		session = new Session();
 		
@@ -43,7 +49,7 @@ public class FDRServices {
 	/*private ArrayList<String> checkProcessAssertions(String processName) {
 		ArrayList<String> result = new ArrayList<>();
 		
-		// criar os 3 métodos
+		// criar os 3 mÃ©todos
 		result.add(checkDeadlockFree(processName));
 		result.add(checkDeterministic(processName));
 		result.add(checkDivergenceFree(processName));
@@ -52,7 +58,7 @@ public class FDRServices {
 	}
 	*/
 	
-	// necessários deadlock, livelock e deterministic 
+	// necessÃ¡rios deadlock, livelock e deterministic 
 	
 	protected Assertion getAssertion(String assertion) {
 		try {
@@ -91,7 +97,7 @@ public class FDRServices {
 			if (event == fdr.INVALIDEVENT) {
 				list.add("-");
 			} else if(session.uncompileEvent(event).toString().equals("?")) {
-				list.add("?");
+				list.add("✓");
 			} else {
 				list.add(session.uncompileEvent(event).toString());
 			}
